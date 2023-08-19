@@ -11,3 +11,5 @@ export default function Document() {
     </Html>
   )
 }
+
+// Работает толко на сервере не прилетает на клиент
