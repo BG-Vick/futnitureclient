@@ -7,10 +7,9 @@ const Custom404 = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      router.push('/')
-    }, 3000);
-  }, [router]);
-
+      //router.push('/devices')
+    }, 3000)
+  }, [router])
 
   return (
     <div className="flex-container">

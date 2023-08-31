@@ -1,16 +1,15 @@
-import { Footer } from './Footer'
-import { Header } from './Header'
-
-// I should to change "any" type*********************************////
+import Footer from "./Footer"
+import Header from "./Header"
+import Sidebar from "./Sidebar"
 interface ILayoutProps {
   children: React.ReactNode
 }
-
 const Layout = ({ children }: ILayoutProps) => {
   return (
     <>
       <Header />
-      <div className="mx-10">{children}</div>
+      <div>{children}</div>
+      <Sidebar/>
       <Footer />
     </>
   )

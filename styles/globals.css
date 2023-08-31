@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Covered+By+Your+Grace&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -15,14 +18,15 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
-
-/* body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+/*
+body {
+  background: #3b3b3b;
 }
- */
+
+.grid > div {
+  color: #e5e5ee;
+  text-align: center;
+  font-seze: 1.4 em;
+  padding: 1em 2 em;
+}
+*/

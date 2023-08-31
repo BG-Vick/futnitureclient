@@ -8,7 +8,7 @@ import { data } from 'autoprefixer'
 
 
 
-export default function AuthForm() {
+export function AuthForm() {
 
   function handleLogout() {
     logout();

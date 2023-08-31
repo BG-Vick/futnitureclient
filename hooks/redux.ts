@@ -1,4 +1,4 @@
-import { cartActions } from "@/store/reducers/CartSlice"
+import { cartActions } from "@/store/reducers/cartSlice"
 import { bindActionCreators } from "@reduxjs/toolkit"
 import { useDispatch } from "react-redux"
 

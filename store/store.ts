@@ -1,20 +1,33 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { productApi } from "@/services/PostService";
-import { cartReducer, cartActions } from "./reducers/CartSlice";
-import { deviceApi } from "@/services/DevicesService";
+import { cartReducer } from './reducers/cartSlice'
+import { deviceApi } from '@/store/services/DevicesService'
+import { createWrapper, HYDRATE } from 'next-redux-wrapper'
+import { configureStore, ThunkAction } from '@reduxjs/toolkit'
+import { Action } from 'redux'
+import userReducer from './reducers/userSlice'
+import { sidebarReducer } from './reducers/sidebarSlice'
+export const makeStore = () =>
+  configureStore({
+    reducer: {
+      [deviceApi.reducerPath]: deviceApi.reducer,
+      cart: cartReducer,
+      user: userReducer,
+      sidebar: sidebarReducer
+    },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({ serializableCheck: false }).concat(
+        deviceApi.middleware
+      ),
+  })
 
+export type AppStore = ReturnType<typeof makeStore>
+export type AppState = ReturnType<AppStore['getState']>
+export type AppDispatch = AppStore['dispatch']
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  AppState,
+  unknown,
+  Action
+>
 
-
-export const store = configureStore({
-        reducer: {
-            [productApi.reducerPath] : productApi.reducer, 
-            [deviceApi.reducerPath] : deviceApi.reducer,
-            cart: cartReducer
-        },
-        middleware: (getDefaultMiddleware) => 
-            getDefaultMiddleware().concat(productApi.middleware, deviceApi.middleware)
-    })
-
- 
-export type TypeRootState = ReturnType<typeof store.getState>
-
+export const store = makeStore()
+export const wrapper = createWrapper<AppStore>(makeStore)

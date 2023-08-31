@@ -1,25 +1,34 @@
-import { useGetAllProductsQuery } from '@/services/PostService'
-import { Product } from '@/components/Product'
-import { Cart } from '@/components/cart/Cart'
+import Product from '@/components/Product'
+import { IDevice } from '@/models/models'
+import axios from 'axios'
+import Link from 'next/link'
+
+export const getStaticProps = async () => {
+  const res = await axios.get('http://localhost:7000/api/device')
+  const data = res.data
+
+  return { props: { data } }
+}
 
 
 
-export default function Products() {
-  
-  
-
-  const { data, error, isLoading } = useGetAllProductsQuery(5)
+const Products = ({ data }: any) => {
+  const products = data.rows
+  // BrandId === samsung
+  const filteredProducts = products.filter((product: any) => {
+    return product.brandId === 1
+  })
   return (
-    <div className=''>
-      {isLoading && <h1>Loading...</h1>}
-      {!!error && <h1>ERROR!!!   SOMETHING WENT WRONG!</h1>}
-      {data?.map((product: any) => (
-        <Product key={product.id} product={product}/>
-      )) 
-      }
-      <div className=' inline-block text-left z-10 '>
-        <Cart/>
+    <section className="py-16">
+      <div className="container mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0">
+          {filteredProducts.map((product: any) => {
+            return <Product key={product.id} product={product}/>
+          })}
+        </div>
       </div>
-      </div>
+    </section>
   )
 }
+
+export default Products

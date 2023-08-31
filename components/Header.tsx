@@ -1,16 +1,27 @@
-import { FaBeer } from 'react-icons/fa'
 import Link from 'next/link'
-import { Navbar } from './modules/Navbar'
+import { useTypedSelector } from '@/hooks/useTypedSelector'
+import { setSidebarState } from '@/store/reducers/sidebarSlice'
+import { useDispatch } from 'react-redux'
+import { BsBag } from 'react-icons/bs'
 
-export function Header() {
+const Header = () => {
+  const dispatch = useDispatch()
 
   return (
-    <header className='mb-10 border border-teal-400 bg-slate-400'>
-      <div className='mx-3'>
-        <FaBeer />
-        <Navbar/>
+    <header className='bg-pink-200'>
+      <div>Header</div>
+      <div>
+        <button
+          onClick={() => {
+            dispatch(setSidebarState())
+          }}
+          className="cursor-pointer flex relative"
+        >
+          <BsBag className="text-2xl" />
+        </button>
       </div>
     </header>
-    
   )
 }
+
+export default Header
