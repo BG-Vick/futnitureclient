@@ -5,23 +5,19 @@ import { useActions } from '@/hooks/redux'
 import { ICart } from '@/models/models'
 import { useTypedSelector } from '@/hooks/useTypedSelector'
 
-
 const Product = ({ product }: any) => {
-  console.log(product)
   const cart = useTypedSelector((state) => state.cart)
 
-
+  const alreadyInCart = cart.some((item) => item.id === product.id)
   function handleAddIntoCart(product: ICart) {
-    console.log(product)
-    const alreadyIntoCart = cart.some((item) => item.id === product.id)
-    if (!alreadyIntoCart) {
+    if (!alreadyInCart) {
       addItem(product)
-    } else{
-      countIncrement(product)
+    } else {
+      return
     }
   }
 
-  const {addItem, removeItem, countDecrement,countIncrement} = useActions()
+  const { addItem, removeItem, countDecrement, countIncrement } = useActions()
   const { id, img, brandId, name, price } = product
   return (
     <div>
@@ -45,8 +41,12 @@ const Product = ({ product }: any) => {
                         items-center justify-center gap-y-2 opacity-0 group-hover:opacity-100 
                         transition-all duration-300"
         >
-          <button onClick={() => handleAddIntoCart(product)}>
-            <div className="flex justify-center items-center text-white w-12 h-12 bg-red-500">
+          <button onClick={() => handleAddIntoCart({ ...product })}>
+            <div
+              className={`${
+                alreadyInCart ? 'bg-gray-300 text-gray-200' : 'bg-red-500 text-white'
+              } flex justify-center items-center  w-12 h-12 `}
+            >
               <BsPlus className="text-3xl" />
             </div>
           </button>
@@ -60,11 +60,13 @@ const Product = ({ product }: any) => {
       </div>
       {/* category & title & price */}
       <div>
-        <div className='text-sm capitalize text-gray-500 mb-1'>{brandId === 1 ? 'Samsung' : 'Apple'}</div>
+        <div className="text-sm capitalize text-gray-500 mb-1">
+          {brandId === 1 ? 'Samsung' : 'Apple'}
+        </div>
         <Link href={`/products/${id}`}>
-          <h2 className='font-semibold mb-1'>{name}</h2>
+          <h2 className="font-semibold mb-1">{name}</h2>
         </Link>
-        <div className='font-semibold'>$ {price}</div>
+        <div className="font-semibold">$ {price}</div>
       </div>
     </div>
   )

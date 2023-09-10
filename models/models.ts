@@ -20,12 +20,12 @@ export interface IUser {
 
 
 /************************** */
-export interface IDevices {
+export interface IProducts {
   count: number;
-  rows: IDevice[];
+  rows: IProduct[];
 }
 
-export interface IDevice {
+export interface IProduct {
   id: number;
   name: string;
   price: number;

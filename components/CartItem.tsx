@@ -5,20 +5,18 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { IoMdAdd, IoMdClose, IoMdRemove } from 'react-icons/io'
 
-
 const CartItem = ({ item }: any) => {
   const cart = useTypedSelector((state) => state.cart)
-  console.log(cart)
   const {addItem, removeItem, countDecrement,countIncrement} = useActions()
+
+
+
 
   function handleRemoveCart(product: ICart) {
     if(product.count < 2){
-      console.log('remove click')
         removeItem(product)
     } else {
-      console.log(' decrement click')
       countDecrement(product)
-      console.log(cart)
     }
   }
 
@@ -49,14 +47,14 @@ const CartItem = ({ item }: any) => {
             </Link>
             {/* remove icon */}
             <div className="text-xl cursor-pointer">
-              <IoMdClose className="text-gray-500 hover:text-red-500 transition" />
+              <IoMdClose onClick={() => removeItem(item)} className="text-gray-500 hover:text-red-500 transition" />
             </div>
           </div>
           <div className=" flex gap-x-2 h-[36px] text-sm">
             {/* qty */}
             <div className="flex flex-1 max-w-[100px]  items-center h-full border text-gray-900 font-medium">
               {/* minus icon */}
-              <div onClick={() => handleRemoveCart(item)} className="flex-1 flex justify-center items-center cursor-pointer">
+              <div onClick={() => handleRemoveCart(item)} className="flex-1 flex justify-center items-center cursor-pointer h-full">
                 <IoMdRemove />
               </div>
               {/* amount */}
@@ -73,7 +71,7 @@ const CartItem = ({ item }: any) => {
             {/* final price */}
             {/* make the price at 2 decimals */}
             <div className="flex-1 flex justify-end items-center text-gray-900 font-medium">
-              {`$ ${parseFloat(price * count).toFixed(2)}`}
+              {`$ ${(price * count)}`}
             </div>
           </div>
         </div>

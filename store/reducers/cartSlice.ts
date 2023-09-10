@@ -9,7 +9,6 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     addItem: (state: typeof initialState, action: PayloadAction<ICart>) => {
-      console.log(action)
       action.payload.count = 1
       state.push(action.payload)
     },
@@ -17,7 +16,7 @@ export const cartSlice = createSlice({
       state: typeof initialState,
       action: PayloadAction<{ id: number }>
     ) => {
-      return state.filter((p) => p.id !== action.payload.id)
+      return state.filter(({ id }) => id !== action.payload.id);
     },
     countIncrement: (state: typeof initialState, action: PayloadAction<{ id: number }>) => {
       state.map((p) => {
@@ -32,6 +31,9 @@ export const cartSlice = createSlice({
           p.count--
         }
       })
+    },
+    clearCard: () => {
+      return initialState
     },
   },
 })

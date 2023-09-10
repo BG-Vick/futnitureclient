@@ -10,25 +10,11 @@ const MyApp: FC<AppProps> = ({ Component, ...rest }) => {
   const { pageProps } = props
   return (
     <Provider store={store}>
-      <Layout>
         <Component {...pageProps} />
-      </Layout>
     </Provider>
   )
 }
 
 export default MyApp
 
-/* const MyApp: FC<AppProps> = ({ Component, ...rest }) => {
-  const { store, props } = wrapper.useWrappedStore(rest)
-  const { pageProps } = props
-  return (
-    <Provider store={store}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </Provider>
-  )
-}
 
-export default MyApp */

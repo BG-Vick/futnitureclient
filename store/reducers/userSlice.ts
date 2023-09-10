@@ -26,7 +26,9 @@ export const userSlice = createSlice({
     builder.addCase(HYDRATE, (state, action) => {
       return {
         ...state,
-        ...action.payload,
+        id: action.payload.user.id,
+        email: action.payload.user.email,
+        role: action.payload.user.role,
       }
     })
   }, 
@@ -35,4 +37,4 @@ export const userSlice = createSlice({
 export const { setUserState } = userSlice.actions
 
 
-export default userSlice.reducer
+export const userReducer = userSlice.reducer

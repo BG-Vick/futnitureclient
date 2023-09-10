@@ -1,4 +1,4 @@
-import { useGetAllDevicesQuery } from '@/store/services/DevicesService'
+import { useGetAllDevicesQuery } from '@/store/api/DevicesService'
 import Link from 'next/link'
 import Head from 'next/head'
 import { useRouter } from 'next/router'

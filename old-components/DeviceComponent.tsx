@@ -1,4 +1,4 @@
-import { useGetAllDevicesQuery, useGetOneDeviceQuery } from '@/store/services/DevicesService'
+import { useGetAllDevicesQuery, useGetOneDeviceQuery } from '@/store/api/DevicesService'
 import Head from 'next/head'
 
 export function DeviceComponent() {
