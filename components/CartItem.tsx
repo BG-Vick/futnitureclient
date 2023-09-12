@@ -28,7 +28,7 @@ const CartItem = ({ item }: any) => {
         <Link href={`/products/${id}`}>
           <Image
             className="max-h-[80px] group-hover:scale-110 transition duration-300 w-auto h-auto"// w-auto h-auto возможны проблемы
-            src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
+            src={'http://localhost:7000/' + img}
             width={80}
             height={80}
             alt="Picture of the author"

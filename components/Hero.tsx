@@ -26,6 +26,7 @@ const Hero = () => {
           <Image
             src={WomanImg}
             alt="Picture of the author"
+            priority
           />
         </div>
       </div>

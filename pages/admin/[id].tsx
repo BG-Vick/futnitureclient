@@ -55,18 +55,17 @@ const OneProduct = ({ product, types, brands }: any) => {
     <section className=" pt-32 lg:py-32 flex items-center">
       <div className="container mx-auto ">
         
-        <div className='flex flex-col lg:flex-row items-center'>
+        <div className='flex flex-col lg:flex-row items-center gap-5'>
          
-          <div className='flex flex-1 justify-center items-center mb-8 lg:mb-0 '>
+          <div className='flex flex-1 justify-center items-center mb-8 lg:mb-0'>
           <Image
-            //className='max-w-[200px] lg:max-w-sm '
-            src={'http://localhost:7000/' + img}
-            alt="Picture of the author"
-            width="0"
-            height="0"
-            sizes="100vw"
-            className="w-full h-auto lg:max-w-sm "
-          />
+              className="w-[100%] h-auto group-hover:scale-110 transition duration-300 object-cover"
+              src={'http://localhost:7000/' + img}
+              width={400}
+              height={400}
+              alt="product"
+              priority
+            />
           </div>
           
           <div className='flex-1 text-center lg:text-left'>
@@ -75,7 +74,8 @@ const OneProduct = ({ product, types, brands }: any) => {
             <div className='mb-8 border'>{info.map(i => 
               <div key={i.id}>
                 <p> Хар-ка: {i.title}</p>
-                <p>Опис-е: {i.description}</p>
+                <p>Опис-е: {i.description}
+                </p>
               </div>
             )
             }</div>
@@ -87,7 +87,7 @@ const OneProduct = ({ product, types, brands }: any) => {
             </button>
           </div>
         </div>
-        <div className=''>
+        <div>
           
 
 
@@ -102,16 +102,6 @@ const OneProduct = ({ product, types, brands }: any) => {
                 info={info}
                 id={id}
             />} 
-
-
-
-
-
-
-
-
-
-
         </div>
       </div>
     </section>

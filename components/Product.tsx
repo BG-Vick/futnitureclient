@@ -19,23 +19,23 @@ const Product = ({ product }: any) => {
 
   const { addItem, removeItem, countDecrement, countIncrement } = useActions()
   const { id, img, brandId, name, price } = product
+
   return (
-    <div>
-      <div className="border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group transition">
-        <div className="w-full h-full flex justify-center items-center">
-          {/* image */}
-          <div className="w-[200px] mx-auto flex justify-center items-center">
+    <div >
+      <div className="border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group transition ">
+        <div className="w-full h-full flex justify-center items-center ">
+           <div className="w-[200px] mx-auto flex justify-center items-center ">
             <Image
-              className="max-h-[160px] group-hover:scale-110 transition duration-300"
+              className="group-hover:scale-110 transition duration-300 object-cover"
               src={'http://localhost:7000/' + img}
-              width={160}
-              height={160}
-              alt="Picture of the author"
-              priority
+              width={400}
+              height={400}
+              alt="product"
+              
             />
           </div>
         </div>
-        {/* buttons */}
+        
         <div
           className="absolute top-6 -right-11 group-hover:right-5  p-2 flex flex-col 
                         items-center justify-center gap-y-2 opacity-0 group-hover:opacity-100 

@@ -35,9 +35,9 @@ const Admin = () => {
   return (
     <div className="flex flex-col h-screen items-center">
       <AdminHeader />
-      <section className="pt-[30vh] pb-[5vh] grow flex w-[80%] ">
+      <section className="pt-[30vh] pb-[5vh] grow flex  ">
         <div className="">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0 ">
             {products.map((product: any) => {
               return <AdminProduct key={product.id} product={product}  handleRemoveProduct={handleRemoveProduct}/>
             })}

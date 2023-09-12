@@ -44,33 +44,32 @@ const OneProduct = ({ product }: any) => {
   }
   
   const { name, price, img, info} = product
-  console.log(img)
   return (
     <Layout>
-    <section className=" pt-32 pb-12 lg:py-32 h-screen flex items-center">
+    <section className=" pt-36 mb-20  h-screen flex items-center  ">
       <div className="container mx-auto">
         
-        <div className='flex flex-col lg:flex-row items-center'>
-         
-          <div className='flex flex-1 justify-center items-center mb-8 lg:mb-0 '>
-            <Image
-              //className='max-w-[200px] lg:max-w-sm '
+        <div className='flex flex-col lg:flex-row items-center gap-5 '>
+          <div className='flex flex-1 justify-center items-center mb-8 lg:mb-0'>
+          <Image
+              className="w-full h-full   max-w-[300px] lg:max-w-md sm:max-w-[350px] object-cover"
               src={'http://localhost:7000/' + img}
-              alt="Picture of the author"
-              width="0"
-              height="0"
-              sizes="100vw"
-              className="w-full h-auto lg:max-w-sm "
-          />   
+              width={400}
+              height={400}
+              alt="product"
+              priority
+            />  
           </div>
           
-          <div className='flex-1 text-center lg:text-left'>
+          <div className=' text-center lg:text-left flex-1 '>
             <h1 className='text-[26px] font-medium mb-2 max-w-[450px] mx-auto lg:mx-0'>{name}</h1>
             <div className='text-xl text-red-500 font-medium mb-6'>$ {price}</div>
             <div className='mb-8 border'>{info.map(i => 
               <div key={i.id}>
                 <p> Хар-ка: {i.title}</p>
-                <p>Опис-е: {i.description}</p>
+                <p>Опис-е: {i.description} 
+            
+                </p>
               </div>
             )
             }</div>
