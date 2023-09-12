@@ -148,7 +148,7 @@ export default function AddProduct() {
               />
             </label>
           </div>
-
+пше
           <div>
             <label className="block mb-2 ">
             <p className='mb-1 ml-1'>Цена</p>
@@ -166,7 +166,7 @@ export default function AddProduct() {
           <p className='mb-1 ml-1'>Изображение</p>
             <input
             onChange={(e) => selectFile(e)}
-              className={clsx("relative  bg-blue-50 border border-gray-300 text-gray-900 text-sm rounded-lg  focus:bg-blue-50 focus:border-blue-500 block w-full p-2.5 cursor-pointer")}
+              className={clsx("relative  bg-blue-50 border border-gray-300 text-gray-900 text-sm rounded-lg  focus:bg-bluej-50 focus:border-blue-500 block w-full p-2.5 cursor-pointer")}
               type="file"
               placeholder='выбери изображение'
               required

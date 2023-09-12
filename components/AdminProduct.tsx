@@ -19,10 +19,12 @@ const AdminProduct = ({ product, handleRemoveProduct }: any) => {
           {/* image */} 
           <div className="w-[200px] mx-auto flex justify-center items-center">
             <Image
-              className="max-h-[160px] group-hover:scale-110 transition duration-300"
-              src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
-              width={160}
-              height={160}
+              //className="max-h-[160px] group-hover:scale-110 transition duration-300"
+              src={'http://localhost:7000/' + img}
+              width="0"
+              height="0"
+              sizes="100vw"
+              className="w-auto h-auto lg:max-w-sm "
               alt="Picture of the author"
               priority
             />

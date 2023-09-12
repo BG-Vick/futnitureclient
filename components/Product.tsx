@@ -27,7 +27,7 @@ const Product = ({ product }: any) => {
           <div className="w-[200px] mx-auto flex justify-center items-center">
             <Image
               className="max-h-[160px] group-hover:scale-110 transition duration-300"
-              src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
+              src={'http://localhost:7000/' + img}
               width={160}
               height={160}
               alt="Picture of the author"

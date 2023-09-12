@@ -59,11 +59,13 @@ const OneProduct = ({ product, types, brands }: any) => {
          
           <div className='flex flex-1 justify-center items-center mb-8 lg:mb-0 '>
           <Image
-            className='max-w-[200px] lg:max-w-sm '
-            src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
+            //className='max-w-[200px] lg:max-w-sm '
+            src={'http://localhost:7000/' + img}
             alt="Picture of the author"
-            width={200}
-            height={200}
+            width="0"
+            height="0"
+            sizes="100vw"
+            className="w-full h-auto lg:max-w-sm "
           />
           </div>
           
