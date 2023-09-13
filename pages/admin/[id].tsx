@@ -12,19 +12,13 @@ import clsx from 'clsx'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import AdminHeader from '@/components/AdminHeader'
-
-
-export const getServerSideProps = async (ctx: any) => {
-  const { id } = ctx.params
-  const product = await fetchOneDevice(id)
-  const types = await fetchTypes()
-  const brands = await fetchBrands()
-  return { props: {
-    product,
-    types,
-    brands
-  } }
-}
+import { wrapper } from '@/store/store'
+import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
+import { parseCookies } from 'nookies'
+import { setUserState } from '@/store/reducers/userSlice'
+import { check } from '@/store/fakeHTTP'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 
 
@@ -33,21 +27,50 @@ export const getServerSideProps = async (ctx: any) => {
 /////////////////////////////////////////////////////////////////////////
 
 
-
+export const getServerSideProps: GetServerSideProps =
+  wrapper.getServerSideProps((store) => async (ctx) => {
+    try{
+      const { id } = ctx.params
+      const product = await fetchOneDevice(id)
+      const types = await fetchTypes()
+      const brands = await fetchBrands()
+      const { token } = parseCookies(ctx)
+      const userData = await check(token)
+      store.dispatch(setUserState(userData))
+      return { props: {
+        product,
+        types,
+        brands
+      } }
+    }catch(e) {
+      console.log(e)
+      return {
+        props: {}
+      }
+    }
+  }) 
 
 
 
 const OneProduct = ({ product, types, brands }: any) => {
   const [edit, setEdit] = useState(false)
-  
-  const { name, price, img, info, brandId, typeId, id} = product
+  const user = useTypedSelector(state => state.user)
+  const router = useRouter()
 
+
+useEffect(() => {
+  if(user.role !== 'ADMIN'){
+    router.push('/auth')
+  }
+},[router, user.role])
+
+  if(!product?.name) return <div>Loading...</div>
+
+  const { name, price, img, info, brandId, typeId, id} = product
   const actualType = types.find(type => type.id === typeId)
   const actualBrand = brands.find(brand => brand.id === brandId)
+
   
-
-
-
   return (
     <>
     {!edit && <AdminHeader/>}
@@ -97,6 +120,7 @@ const OneProduct = ({ product, types, brands }: any) => {
                 actualType={actualType}
                 actualBrand={actualBrand}
                 setEdit={setEdit}
+                edit={edit}
                 name={name}
                 price={price}
                 info={info}
@@ -112,3 +136,25 @@ const OneProduct = ({ product, types, brands }: any) => {
 }
 
 export default OneProduct
+
+
+
+
+
+
+
+
+
+
+/* 
+ export const getServerSideProps = async (ctx: any) => {
+  const { id } = ctx.params
+  const product = await fetchOneDevice(id)
+  const types = await fetchTypes()
+  const brands = await fetchBrands()
+  return { props: {
+    product,
+    types,
+    brands
+  } }
+} */

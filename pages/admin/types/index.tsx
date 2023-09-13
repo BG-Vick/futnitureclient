@@ -1,13 +1,38 @@
 import AdminHeader from '@/components/AdminHeader'
 import Footer from '@/components/Footer'
 import { ModalType } from '@/components/ModalType'
+import { useTypedSelector } from '@/hooks/useTypedSelector'
 import {
   createType,
   deleteType,
   fetchBrands,
   fetchTypes,
 } from '@/store/typesApi'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
+import { wrapper } from '@/store/store'
+import { parseCookies } from 'nookies'
+import { check } from '@/store/fakeHTTP'
+import { setUserState } from '@/store/reducers/userSlice'
+
+
+
+export const getServerSideProps: GetServerSideProps =
+wrapper.getServerSideProps((store) => async (ctx) => {
+  try {
+    const { token } = parseCookies(ctx)
+    const userData = await check(token)
+    store.dispatch(setUserState(userData))
+  } catch (e) {
+    console.log(e)
+    return { props: {} }
+  }
+  return { props: {} }
+})
+
+
+
 
 export default function Types() {
   const [addType, setAddType] = useState(false)
@@ -16,6 +41,16 @@ export default function Types() {
   const [refresh, setRefresh] = useState(false)
 
   const [types, setTypes] = useState([])
+  
+  const user = useTypedSelector(state => state.user)
+  const router = useRouter()
+
+
+useEffect(() => {
+  if(user.role !== 'ADMIN'){
+    router.push('/auth')
+  }
+},[router, user.role])
 
   useEffect(() => {
     if (modalVisible === false) {
@@ -36,7 +71,7 @@ export default function Types() {
   return (
     <div className='flex flex-col h-screen'>
       <AdminHeader/>
-      <section className="pt-[15vh] grow mb-5">
+      <section className="pt-[20vh] mb-[5vh] grow">
         <div className="flex flex-col justify-center items-center  ">
           <button
             onClick={() => setAddType(!addType)}

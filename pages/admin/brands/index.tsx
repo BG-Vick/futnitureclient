@@ -1,14 +1,49 @@
 import AdminHeader from '@/components/AdminHeader'
 import Footer from '@/components/Footer'
 import { ModalBrand } from '@/components/ModalBrand'
+import { useTypedSelector } from '@/hooks/useTypedSelector'
 import { createBrand, fetchBrands, deleteBrand } from '@/store/typesApi'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
+import { wrapper } from '@/store/store'
+import { parseCookies } from 'nookies'
+import { check } from '@/store/fakeHTTP'
+import { setUserState } from '@/store/reducers/userSlice'
+
+
+
+export const getServerSideProps: GetServerSideProps =
+wrapper.getServerSideProps((store) => async (ctx) => {
+  try {
+    const { token } = parseCookies(ctx)
+    const userData = await check(token)
+    store.dispatch(setUserState(userData))
+  } catch (e) {
+    console.log(e)
+    return { props: {} }
+  }
+  return { props: {} }
+})
+
+
 
 export default function Brands() {
   const [addBrand, setAddBrand] = useState(false)
   const [brandState, setBrandState] = useState('')
   const [modalVisible, setModalVisible] = useState<number | false>(false)
   const [refresh, setRefresh] = useState(false)
+
+  const user = useTypedSelector(state => state.user)
+  const router = useRouter()
+
+  
+
+useEffect(() => {
+  if(user.role !== 'ADMIN'){
+    router.push('/auth')
+  }
+},[router, user.role])
 
   const [brands, setBrands] = useState([])
 

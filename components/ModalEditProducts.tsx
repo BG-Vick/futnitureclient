@@ -1,4 +1,4 @@
-import { deleteOneDevice, fetchAllDevice } from '@/store/typesApi'
+/* import { deleteOneDevice, fetchAllDevice } from '@/store/typesApi'
 import { useState, useEffect } from 'react'
 import EditProduct from './EditProduct'
 
@@ -80,3 +80,4 @@ export default function ModalEditProducts({
     </div>
   )
 }
+ */

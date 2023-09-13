@@ -6,16 +6,25 @@ import { GrLogout } from 'react-icons/gr'
 import Logo from '@/public/logo (1).svg'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
+import { registration, login, logout, check, getCookie } from '@/store/fakeHTTP'
+import { setUserState } from '@/store/reducers/userSlice'
+
 
 
 const AdminHeader = () => {
   const [isActive, setIsActive] = useState(false)
   const dispatch = useDispatch()
-  const cart = useTypedSelector((state) => state.cart)
-  
-  const cartAmount = cart.reduce((accumulator, currentItem)=>{
-    return +(accumulator) + +(currentItem.count);
-  }, 0)
+
+  function handleLogout() {
+    logout()
+    dispatch(
+      setUserState({
+        id: null,
+        email: '',
+        role: '',
+      })
+    )
+  }
 
 
   useEffect(() => {
@@ -46,8 +55,9 @@ const AdminHeader = () => {
       <Link href={'/admin/types'}>
        Типы
       </Link>
-      {/* Logout   onClick => logout! */}
+
       <div
+      onClick={handleLogout}
         className="border-2 border-black rounded-lg p-3 cursor-pointer flex relative "
       >
         <GrLogout/>

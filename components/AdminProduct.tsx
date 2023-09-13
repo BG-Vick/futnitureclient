@@ -23,6 +23,7 @@ const AdminProduct = ({ product, handleRemoveProduct }: any) => {
               width={400}
               height={400}
               alt="product"
+              priority
             />
           </div>
         </div>
@@ -34,7 +35,7 @@ const AdminProduct = ({ product, handleRemoveProduct }: any) => {
         >
         <button>
             <div
-              onClick={() => handleRemoveProduct(id)}
+              onClick={() => handleRemoveProduct(id, img)}
               className={`bg-red-500 text-black flex justify-center items-center  w-12 h-12 `}
             >
               <AiFillDelete className="text-3xl" />
@@ -48,7 +49,6 @@ const AdminProduct = ({ product, handleRemoveProduct }: any) => {
           </Link>
         </div>
       </div>
-      {/* category & title & price */}
       <div>
         <div className="text-sm capitalize text-gray-500 mb-1">
           {brandId === 1 ? 'Samsung' : 'Apple'}

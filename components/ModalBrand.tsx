@@ -2,7 +2,6 @@ import { updateBrand } from '@/store/typesApi'
 import { useState } from 'react'
 
 export function ModalBrand({ isVisible, onClose }: any) {
-  console.log(isVisible)
   const [brand, setBrand] = useState('')
   
   const handleClose = (e) => {

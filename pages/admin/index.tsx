@@ -5,12 +5,46 @@ import AdminHeader from '@/components/AdminHeader'
 import Footer from '@/components/Footer'
 import AdminProduct from '@/components/AdminProduct'
 import AdminLayout from '@/components/AdminLayout'
+import { useTypedSelector } from '@/hooks/useTypedSelector'
+import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
+import { wrapper } from '@/store/store'
+import { parseCookies } from 'nookies'
+import { check } from '@/store/fakeHTTP'
+import { setUserState } from '@/store/reducers/userSlice'
+import { useRouter } from 'next/router'
 
 
 
-const Admin = () => {
+
+export const getServerSideProps: GetServerSideProps =
+  wrapper.getServerSideProps((store) => async (ctx) => {
+    try {
+      const { token } = parseCookies(ctx)
+      const userData = await check(token)
+      store.dispatch(setUserState(userData))
+    } catch (e) {
+      console.log(e)
+      return { props: {} }
+    }
+    return { props: {} }
+  })
+
+
+
+const Admin = ({}) => {
+
   const [products, setProducts] = useState([])
   const [count, setCount] = useState(5)
+  const user = useTypedSelector(state => state.user)
+  const router = useRouter()
+
+
+  useEffect(() => {
+    if(user.role !== 'ADMIN'){
+      router.push('/auth')
+    }
+  },[router, user.role])
+
 
   useEffect(() => {
     fetchAllDevice({ limit: count })
@@ -22,8 +56,10 @@ const Admin = () => {
   }, [count])
 
 
-  const handleRemoveProduct = async (id: number) => {
-    await deleteOneDevice(id)
+
+  
+  const handleRemoveProduct = async (id: number, img:string) => {
+    await deleteOneDevice(id, img)
     fetchAllDevice({ limit: count })
       .then((data) => {
         setProducts(data.rows)
@@ -53,3 +89,6 @@ const Admin = () => {
 }
 
 export default Admin
+
+
+

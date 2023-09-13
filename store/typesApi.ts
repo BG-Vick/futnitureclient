@@ -132,8 +132,13 @@ export const fetchAllDevice = async ({brandId ='', typeId ='', limit= 9, page=1}
     return data
   }
 
-  export const deleteOneDevice = async (id:number) => {
-    const { data } = await $host.delete(`api/device/ ${id}`)
+  export const deleteOneDevice = async (id:number, img: string) => {
+    const { data } = await $host.delete(`api/device/ ${id}`,{
+      data: {
+        img
+      }
+    })
+    console.log(data)
     return data
   }
 

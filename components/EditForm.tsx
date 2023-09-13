@@ -1,4 +1,4 @@
-import { fetchBrands, fetchTypes, updateInfo } from '@/store/typesApi'
+/* import { fetchBrands, fetchTypes, } from '@/store/typesApi'
 import { useState, useEffect } from 'react'
 import FormInfo from './FormInfo'
 import { DropDown } from '@/pages/dropdown'
@@ -79,17 +79,6 @@ return(
                     </div>
                 ))}
             </DropDown>
-
-
-
-
-
-{/*   {
-    brands.map((brand) =>
-      <div onClick={() => setSelectedBrand(brand)} className="border border-red-400" key={brand.id}>{brand.name}</div>
-    )
-  } */}
-
 
   </div>
   <div >
@@ -182,3 +171,4 @@ return(
   </form>
 )
 }
+ */

@@ -35,6 +35,7 @@ export const login = async (email, password) => {
   return jwt_decode(data.token)
 }
 
+
 export const logout = () => {
   destroyCookie(null, 'token')
 }

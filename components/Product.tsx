@@ -58,7 +58,6 @@ const Product = ({ product }: any) => {
           </Link>
         </div>
       </div>
-      {/* category & title & price */}
       <div>
         <div className="text-sm capitalize text-gray-500 mb-1">
           {brandId === 1 ? 'Samsung' : 'Apple'}

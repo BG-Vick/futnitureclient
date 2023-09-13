@@ -1,6 +1,7 @@
  import AdminHeader from '@/components/AdminHeader'
 import Footer from '@/components/Footer'
 import { ModalType } from '@/components/ModalType'
+import { useTypedSelector } from '@/hooks/useTypedSelector'
 import {
   createDevice,
   createType,
@@ -8,14 +9,41 @@ import {
   fetchTypes,
 } from '@/store/typesApi'
 import clsx from 'clsx'
+import { useRouter } from 'next/router'
 import { type } from 'os'
 import { useEffect, useState } from 'react'
 import {AiOutlineCloudUpload} from 'react-icons/ai'
+import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
+import { wrapper } from '@/store/store'
+import { parseCookies } from 'nookies'
+import { check } from '@/store/fakeHTTP'
+import { setUserState } from '@/store/reducers/userSlice'
+
+
+
+export const getServerSideProps: GetServerSideProps =
+wrapper.getServerSideProps((store) => async (ctx) => {
+  try {
+    const { token } = parseCookies(ctx)
+    const userData = await check(token)
+    store.dispatch(setUserState(userData))
+  } catch (e) {
+    console.log(e)
+    return { props: {} }
+  }
+  return { props: {} }
+})
+
+
+
+
+
+
+
 
 
 
 export default function AddProduct() {
-  console.log('render')
   const [types, setTypes] = useState([])
   const [brands, setBrands] = useState([])
   const [selectedType, setSelectedType] = useState(null)
@@ -23,13 +51,21 @@ export default function AddProduct() {
   const [visibleTypes, setVisibleTypes] = useState(false)
   const [visibleBrand, setVisibleBrand] = useState(false)
   const [name, setName] = useState('')
-  const [price, setPrice] = useState('')
+  const [price, setPrice] = useState<number | string>('')
   const [file, setFile] = useState('')
-  console.log(file)
- 
   const [info, setInfo] = useState<any>([])
 
- // const [refresh, setRefresh] = useState(false)
+  const user = useTypedSelector(state => state.user)
+  const router = useRouter()
+
+ 
+  
+
+useEffect(() => {
+  if(user.role !== 'ADMIN'){
+    router.push('/auth')
+  }
+},[router, user.role])
 
 
   useEffect(() => {
@@ -84,7 +120,7 @@ export default function AddProduct() {
 
 
   return (
-    <div onClick={() => console.log(file)} className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen">
       <AdminHeader />
       <form className="pt-[15vh] mb-5 grow flex flex-col content-center">
         <div className="flex flex-col  w-[800px] self-center mt-6 ">
@@ -93,7 +129,7 @@ export default function AddProduct() {
             onClick={() => setVisibleTypes(!visibleTypes)}
             className={clsx(selectedType && "bg-green-100","border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-blue-50 relative")}
           > 
-            {selectedType?.name || '*'}
+            {selectedType?.name || 'не выбран'}
             <div className="absolute rounded-lg w-full mt-3  ml-3 z-10">
               {visibleTypes &&
                 types.map((type) => (
@@ -102,7 +138,7 @@ export default function AddProduct() {
                       setSelectedType(type)
                     }}
                     key={type.id}
-                    className={clsx('hover:bg-blue-400 bg-blue-100 border border-gray-300 text-gray-900  text-sm p-2.5 rounded-lg duration-300')}
+                    className={clsx(' hover:bg-blue-400  bg-blue-100 border border-gray-300 text-gray-900  text-sm p-2.5 rounded-lg duration-300')}
                   >
                     {type.name}
                   </div>
@@ -117,7 +153,7 @@ export default function AddProduct() {
             onClick={() => setVisibleBrand(!visibleBrand)}
             className={clsx(selectedBrand &&  "bg-green-100","border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-blue-50 relative")}
           >
-            {selectedBrand?.name || 'Выбери бренд'}
+            {selectedBrand?.name || 'не выбран'}
             <div className="absolute rounded-lg w-full mt-3  ml-3">
               {!visibleTypes && visibleBrand &&
                 brands.map((brand) => (
@@ -148,7 +184,6 @@ export default function AddProduct() {
               />
             </label>
           </div>
-пше
           <div>
             <label className="block mb-2 ">
             <p className='mb-1 ml-1'>Цена</p>
@@ -166,13 +201,13 @@ export default function AddProduct() {
           <p className='mb-1 ml-1'>Изображение</p>
             <input
             onChange={(e) => selectFile(e)}
-              className={clsx("relative  bg-blue-50 border border-gray-300 text-gray-900 text-sm rounded-lg  focus:bg-bluej-50 focus:border-blue-500 block w-full p-2.5 cursor-pointer")}
+              className={clsx("opacity-0 max-w-[100px] relative  bg-blue-50 border border-gray-300 text-gray-900 text-sm rounded-lg  focus:bg-bluej-50 focus:border-blue-500 block w-full p-2.5 cursor-pointer")}
               type="file"
               placeholder='выбери изображение'
               required
             />
-            <p className='absolute w-60 h-10 bg-blue-50 -mt-11 ml-1' >
-            <AiOutlineCloudUpload className='w-10 h-10 absolute ml-4  '/>
+            <p className='absolute w-[95px] h-10  -mt-11 ml-1' >
+            <AiOutlineCloudUpload className='w-11 h-11 absolute ml-4  cursor-pointer'/>
             </p>
           </label>
 
@@ -180,7 +215,7 @@ export default function AddProduct() {
             {!!info &&
               info.map((info) => (
                 <div
-                  key={info.id}
+                  key={info.number}
                   className="rounded-lg sm:w-auto px-5 py-2.5 mt-6 flex flex-col"
                 >
                   <label>

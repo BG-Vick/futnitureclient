@@ -1,4 +1,4 @@
-import { ICart, IProduct, IProducts } from '@/models/models'
+/* import { ICart, IProduct, IProducts } from '@/models/models'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { HYDRATE } from 'next-redux-wrapper'
 import build from 'next/dist/build'
@@ -23,3 +23,4 @@ export const productSlice = createSlice({
 
 export const productReducer = productSlice.reducer
 export const { setProductState } = productSlice.actions
+ */

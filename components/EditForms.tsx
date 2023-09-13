@@ -7,12 +7,12 @@ import { useRouter } from 'next/router'
 
 
 
-export default function EditForms({setEdit, name, price, types, brands, actualType, actualBrand, info, id} : any) {
+export default function EditForms({setEdit,edit, name, price, types, brands, actualType, actualBrand, info, id} : any) {
 
     const [nameInput, setNameInput] = useState(name)
     const [priceInput, setPriceInput] = useState(price)
     const [infoInput, setInfoInput] = useState<any>(info)
-    console.log(infoInput)
+
     const [selectedType, setSelectedType] = useState(actualType)
     const [selectedBrand, setSelectedBrand] = useState(actualBrand)
     const [visibleTypes, setVisibleTypes] = useState(false)
@@ -24,7 +24,6 @@ export default function EditForms({setEdit, name, price, types, brands, actualTy
 
 
     const removeInfo = (id: number) => {
-        console.log('remove')
         setInfoInput(infoInput.filter(i => i.id !== id))
       }
 
@@ -61,7 +60,7 @@ export default function EditForms({setEdit, name, price, types, brands, actualTy
     <div className="flex flex-col  w-[800px] self-center  ">
       <div
         onClick={() => setVisibleTypes(!visibleTypes)}
-        className={clsx(selectedType && "bg-gray-100","border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5  relative")}
+        className={clsx(selectedType && "bg-green-100","border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5  relative")}
       >
         {selectedType?.name || 'Выбери тип'}
         <div className="absolute rounded-lg w-full mt-3  ml-3 z-10">
@@ -72,7 +71,7 @@ export default function EditForms({setEdit, name, price, types, brands, actualTy
                   setSelectedType(type)
                 }}
                 key={type.id}
-                className={clsx('hover:bg-blue-400 bg-gray-100 border border-gray-300 text-gray-900  text-sm p-2.5 rounded-lg duration-300')}
+                className={clsx('hover:bg-blue-400 bg-blue-50 border border-gray-300 text-gray-900  text-sm p-2.5 rounded-lg duration-300')}
               >
                 {type.name}
               </div>
@@ -84,7 +83,7 @@ export default function EditForms({setEdit, name, price, types, brands, actualTy
     <div className="flex flex-col  w-[800px] self-center mt-6 bg-green-100">
       <div
         onClick={() => setVisibleBrand(!visibleBrand)}
-        className={clsx(selectedBrand &&  "bg-gray-100","border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-blue-50 relative ")}
+        className={clsx(selectedBrand &&  "bg-green-100","border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-blue-50 relative ")}
       >
         {selectedBrand?.name || 'Выбери бренд'}
 {/*         {!visibleBrand ? (
@@ -100,7 +99,7 @@ export default function EditForms({setEdit, name, price, types, brands, actualTy
                   setSelectedBrand(brand)
                 }}
                 key={brand.id}
-                className="hover:bg-blue-400 bg-gray-100  border border-gray-300 text-gray-900  text-sm p-2.5 rounded-lg duration-300 "
+                className="hover:bg-blue-400 bg-blue-50  border border-gray-300 text-gray-900  text-sm p-2.5 rounded-lg duration-300 "
               >
                 {brand.name}
               </div>
@@ -108,18 +107,6 @@ export default function EditForms({setEdit, name, price, types, brands, actualTy
         </div>
       </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
     <div className="flex flex-col  w-[800px] self-center mt-6">
       <div>
         <label className="block mb-2 text-sm font-medium text-gray-900">
@@ -127,7 +114,7 @@ export default function EditForms({setEdit, name, price, types, brands, actualTy
           <input
             onChange={(e) => setNameInput(e.target.value)} 
             type="text"
-            className={clsx(nameInput && "bg-gray-100"," border border-gray-300 text-gray-900 text-sm rounded-lg focus:bg-gray-50 focus:border-blue-500 block w-full p-2.5  ")}
+            className={clsx(nameInput && "bg-green-100"," bg-blue-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:bg-gray-50 focus:border-blue-500 block w-full p-2.5  ")}
             value={nameInput} 
             required
           />
@@ -140,7 +127,7 @@ export default function EditForms({setEdit, name, price, types, brands, actualTy
           <input
           onChange={(e) => setPriceInput(Number(e.target.value))} 
             type="number"
-            className={clsx(!!priceInput &&"bg-gray-100","bg-white border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500  focus:bg-gray-50 block w-full p-2.5  ")}
+            className={clsx(!!priceInput && "bg-green-100" ,"bg-blue-50  border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500  focus:bg-gray-50 block w-full p-2.5  ")}
              value={priceInput}
             required
           />
@@ -159,9 +146,10 @@ export default function EditForms({setEdit, name, price, types, brands, actualTy
 
       <button
         onClick={(e) => {
-            //e.preventDefault()
+            
           if(selectedType && selectedBrand && nameInput && priceInput ){
             updateProduct(e)
+            setEdit(!edit)
           }else {
             alert('Заполните все поля!')
           }
@@ -172,17 +160,5 @@ export default function EditForms({setEdit, name, price, types, brands, actualTy
       </button>
     </div>
   </form>
-
-
-
-
-
-
-
-
-
-
-
-
   )
 }
