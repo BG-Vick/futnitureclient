@@ -20,8 +20,7 @@ const Products = ({ data }: any) => {
   return (
     <>
       <Layout>
-        <Hero />
-        <section className="py-16">
+        <section className="pt-[20vh]">
           <div className="container mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0">
               {products.map((product: any) => {
@@ -30,6 +29,7 @@ const Products = ({ data }: any) => {
             </div>
           </div>
         </section>
+        <div className='mb-10 bg-pink-100'></div>
       </Layout>
     </>
   )

@@ -17,7 +17,7 @@ const Product = ({ product }: any) => {
     }
   }
 
-  const { addItem, removeItem, countDecrement, countIncrement } = useActions()
+  const { addItem} = useActions()
   const { id, img, brandId, name, price } = product
 
   return (

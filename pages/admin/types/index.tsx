@@ -15,6 +15,7 @@ import { wrapper } from '@/store/store'
 import { parseCookies } from 'nookies'
 import { check } from '@/store/fakeHTTP'
 import { setUserState } from '@/store/reducers/userSlice'
+import Link from 'next/link'
 
 
 
@@ -43,14 +44,11 @@ export default function Types() {
   const [types, setTypes] = useState([])
   
   const user = useTypedSelector(state => state.user)
+  console.log(user)
   const router = useRouter()
 
 
-useEffect(() => {
-  if(user.role !== 'ADMIN'){
-    router.push('/auth')
-  }
-},[router, user.role])
+
 
   useEffect(() => {
     if (modalVisible === false) {
@@ -67,6 +65,22 @@ useEffect(() => {
       })
       .catch((e) => alert(e.response.data.message))
   }
+
+
+  if(user.role !== 'ADMIN')   return (
+    <div className='flex flex-col  justify-center items-center h-screen bg-black'>
+      <div className='flex flex-col gap-4'>
+      <h3 className='text-2xl text-white'>Войдите как администратор!</h3>
+      <Link href="/auth" passHref legacyBehavior>
+          <button
+          className=' bg-white p-2 border-4 rounded-lg cursor-pointer hover:border-white hover:bg-gray-300 hover:border-4'
+          type="button" >
+            Return To Home
+          </button>
+        </Link>
+      </div>
+  </div>
+  )
 
   return (
     <div className='flex flex-col h-screen'>

@@ -16,7 +16,7 @@ export const getStaticPaths = async () => {
   }))
   return {
     paths,
-    fallback: false, // Error handling
+    fallback: false, 
   }
 }
 
@@ -25,7 +25,7 @@ export const getStaticProps = async (ctx: any) => {
   const res = await axios.get(`http://localhost:7000/api/device/${id}`)
   const product = res.data
 
-  return { props: { product } }
+  return { props: { product }, }
 }
 
 const OneProduct = ({ product }: any) => {

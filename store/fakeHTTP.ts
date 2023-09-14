@@ -18,7 +18,7 @@ export const $host = axios.create({
 
 
 
-export const registration = async (email, password) => {
+export const registration = async (email:string, password:string) => {
   const { data } = await $host.post('api/user/registration', {
     email,
     password,
@@ -27,7 +27,7 @@ export const registration = async (email, password) => {
   return jwt_decode(data.token)
 }
 
-export const login = async (email, password) => {
+export const login = async (email:string, password:string) => {
   const { data } = await $host.post('api/user/login', { email, password })
   setCookie(null, 'token', data.token, {
     maxAge: 30 * 24 * 60 * 60,

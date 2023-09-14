@@ -19,6 +19,7 @@ import { setUserState } from '@/store/reducers/userSlice'
 import { check } from '@/store/fakeHTTP'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import Link from 'next/link'
 
 
 
@@ -58,11 +59,7 @@ const OneProduct = ({ product, types, brands }: any) => {
   const router = useRouter()
 
 
-useEffect(() => {
-  if(user.role !== 'ADMIN'){
-    router.push('/auth')
-  }
-},[router, user.role])
+
 
   if(!product?.name) return <div>Loading...</div>
 
@@ -70,7 +67,20 @@ useEffect(() => {
   const actualType = types.find(type => type.id === typeId)
   const actualBrand = brands.find(brand => brand.id === brandId)
 
-  
+  if(user.role !== 'ADMIN')   return (
+    <div className='flex flex-col  justify-center items-center h-screen bg-black'>
+      <div className='flex flex-col gap-4'>
+      <h3 className='text-2xl text-white'>Войдите как администратор!</h3>
+      <Link href="/auth" passHref legacyBehavior>
+          <button
+          className=' bg-white p-2 border-4 rounded-lg cursor-pointer hover:border-white hover:bg-gray-300 hover:border-4'
+          type="button" >
+            Return To Home
+          </button>
+        </Link>
+      </div>
+  </div>
+  )
   return (
     <>
     {!edit && <AdminHeader/>}
@@ -82,7 +92,7 @@ useEffect(() => {
          
           <div className='flex flex-1 justify-center items-center mb-8 lg:mb-0'>
           <Image
-              className="w-[100%] h-auto group-hover:scale-110 transition duration-300 object-cover"
+              className="w-[80%] h-auto group-hover:scale-110 transition duration-300 object-cover"
               src={'http://localhost:7000/' + img}
               width={400}
               height={400}
@@ -142,19 +152,3 @@ export default OneProduct
 
 
 
-
-
-
-
-/* 
- export const getServerSideProps = async (ctx: any) => {
-  const { id } = ctx.params
-  const product = await fetchOneDevice(id)
-  const types = await fetchTypes()
-  const brands = await fetchBrands()
-  return { props: {
-    product,
-    types,
-    brands
-  } }
-} */

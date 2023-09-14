@@ -1,22 +1,30 @@
 import Link from 'next/link'
-import { useTypedSelector } from '@/hooks/useTypedSelector'
-import { setSidebarState } from '@/store/reducers/sidebarSlice'
 import { useDispatch } from 'react-redux'
 import { GrLogout } from 'react-icons/gr'
 import Logo from '@/public/logo (1).svg'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
-import { registration, login, logout, check, getCookie } from '@/store/fakeHTTP'
 import { setUserState } from '@/store/reducers/userSlice'
-
+import { useRouter } from 'next/router'
+import clsx from 'clsx'
+import { destroyCookie } from 'nookies'
+import nookies from 'nookies'
 
 
 const AdminHeader = () => {
   const [isActive, setIsActive] = useState(false)
   const dispatch = useDispatch()
+  const router = useRouter()
+  const { pathname } = useRouter()
+  
+  const activeLink = {
+    add:'/admin/add',
+    brands:'/admin/brands',
+    types:'/admin/types'
+  }
 
   function handleLogout() {
-    logout()
+    destroyCookie(null, 'token')
     dispatch(
       setUserState({
         id: null,
@@ -24,6 +32,7 @@ const AdminHeader = () => {
         role: '',
       })
     )
+    //router.push('/')
   }
 
 
@@ -46,13 +55,19 @@ const AdminHeader = () => {
           />
           </div>
       </Link>
-      <Link href={'/admin/add'}>
+      <Link
+      className={clsx(activeLink.add === pathname && 'bg-blue-200', 'cursor-pointer hover:bg-gray-100 p-4 rounded-lg')}
+      href={'/admin/add'}>
        Добавить новый продукт
       </Link>
-      <Link href={'/admin/brands'}>
+      <Link
+      className={clsx(activeLink.brands === pathname && 'bg-blue-200', 'cursor-pointer hover:bg-gray-100 p-4 rounded-lg')}
+      href={'/admin/brands'}>
         Бренды
       </Link>
-      <Link href={'/admin/types'}>
+      <Link
+      className={clsx(activeLink.types === pathname && 'bg-blue-200', 'cursor-pointer hover:bg-gray-100 p-4 rounded-lg')}
+      href={'/admin/types'}>
        Типы
       </Link>
 
