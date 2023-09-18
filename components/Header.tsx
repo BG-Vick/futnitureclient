@@ -3,7 +3,8 @@ import { useTypedSelector } from '@/hooks/useTypedSelector'
 import { setSidebarState } from '@/store/reducers/sidebarSlice'
 import { useDispatch } from 'react-redux'
 import { BsBag } from 'react-icons/bs'
-import { BiLogoBaidu } from 'react-icons/bi'
+import { MdAdminPanelSettings } from 'react-icons/md'
+import { TbHomeSearch } from 'react-icons/tb'
 import Logo from '@/public/logo (1).svg'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
@@ -18,6 +19,8 @@ const Header = () => {
   const cartAmount = cart.reduce((accumulator, currentItem)=>{
     return +(accumulator) + +(currentItem.count);
   }, 0)
+
+
 
   const { pathname } = useRouter()
   
@@ -38,9 +41,16 @@ const Header = () => {
     <header className={`${isActive ? 'bg-white py-4 shadow-md' : 'bg-none py-6'} fixed w-full z-10 transition-all`}>
       <div className='container mx-auto flex items-center justify-between h-full '>
       <Link
-      className='cursor-pointer'
+      className={clsx(activeLink.home === pathname && 'bg-gray-200', '  cursor-pointer hover:bg-gray-100 p-4 rounded-lg')}
       href={'/'}>
           <div>
+          <TbHomeSearch className='w-[40px] h-[40px]'/>
+          </div>
+      </Link>
+      <Link
+      className={clsx(activeLink.products === pathname && 'bg-gray-200', '  cursor-pointer hover:bg-gray-100 p-4 rounded-lg')}
+      href={'/products'}>
+                <div>
           <Image
             className='w-[40px] '
             src={Logo}
@@ -48,21 +58,13 @@ const Header = () => {
           />
           </div>
       </Link>
+      <div className='flex items-center '>
       <Link
-      className={clsx(activeLink.home === pathname && 'bg-blue-200', 'cursor-pointer hover:bg-gray-100 p-4 rounded-lg')}
-      href={'/'}>
-        Home
-      </Link>
-      <Link
-      className={clsx(activeLink.products === pathname && 'bg-blue-200', 'cursor-pointer hover:bg-gray-100 p-4 rounded-lg')}
-      href={'/products'}>
-        Products
-      </Link>
-      <Link
-      className={clsx(activeLink.admin === pathname && 'bg-blue-200', 'cursor-pointer hover:bg-gray-100 p-4 rounded-lg')}
+      className={clsx(activeLink.admin === pathname && 'bg-blue-200', 'cursor-pointer hover:bg-gray-100 p-4 rounded-lg ')}
       href={'/auth'}>
-        Authorization
+        <MdAdminPanelSettings className='w-6 h-6'/>
       </Link>
+      <div>
       <div
         onClick={() => {
           dispatch(setSidebarState())
@@ -75,6 +77,10 @@ const Header = () => {
           {cartAmount}
         </div>
       </div>
+    </div>
+
+      </div>
+
       </div>
     </header>
   )

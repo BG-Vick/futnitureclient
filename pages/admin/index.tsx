@@ -25,7 +25,6 @@ export const getServerSideProps: GetServerSideProps =
       const userData = await check(token)
       store.dispatch(setUserState(userData))
     } catch (e) {
-      console.log(e)
       return { props: {} }
     }
     return { props: {} }
@@ -38,7 +37,7 @@ const Admin = ({}) => {
   const [products, setProducts] = useState([])
   const [count, setCount] = useState(5)
   const user = useTypedSelector(state => state.user)
-  console.log(user)
+
   
   
 
@@ -67,7 +66,7 @@ const Admin = ({}) => {
       })
       .catch((e) => console.log(e))
   }
-  console.log(user)
+  
   if(user.role !== 'ADMIN')   return (
     <div className='flex flex-col  justify-center items-center h-screen bg-black'>
       <div className='flex flex-col gap-4'>

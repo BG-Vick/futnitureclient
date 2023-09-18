@@ -110,7 +110,6 @@ export default function AddProduct() {
     setSelectedType(null)
     setInfo([])
   }
-  console.log(user)
   if(user.role !== 'ADMIN')   return (
     <div className='flex flex-col  justify-center items-center h-screen bg-black'>
       <div className='flex flex-col gap-4'>

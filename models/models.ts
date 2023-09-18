@@ -7,6 +7,7 @@ export interface IQuery {
   page: number
   brandId: number | ""
   typeId: number | ""
+  name: string
 }
 
 /******************************************************************* */

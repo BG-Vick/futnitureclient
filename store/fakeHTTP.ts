@@ -2,12 +2,15 @@ import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import { parseCookies, setCookie, destroyCookie } from 'nookies'
 import { config } from 'process'
+import { IQuery } from '@/models/models'
+
+
 
 export function getCookie(name: string) {
   // нужно будет написать предупреждение в футере или для одмена.
   const value = `; ${document.cookie}`
   const parts = value.split(`; ${name}=`)
-  if (parts.length === 2) return parts.pop().split(';').shift()
+  if (parts.length === 2) return parts?.pop().split(';').shift()
 }
 
 export const $host = axios.create({
@@ -57,8 +60,16 @@ export const check = async (token: any) => {
 }
 
 
-export const getAllProducts = async () => {
-  const { data } = await $host.get('/api/device')
+export const getAllProducts = async ({typeId, brandId, page, limit, name}: IQuery) => {
+  const { data } = await $host.get('/api/device', {
+    params: {
+      typeId,
+      brandId,
+      page,
+      limit,
+      name
+    }
+  })
   return data
 } 
 

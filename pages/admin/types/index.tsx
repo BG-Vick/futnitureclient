@@ -44,8 +44,6 @@ export default function Types() {
   const [types, setTypes] = useState([])
   
   const user = useTypedSelector(state => state.user)
-  console.log(user)
-  const router = useRouter()
 
 
 

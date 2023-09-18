@@ -18,7 +18,7 @@ const Product = ({ product }: any) => {
   }
 
   const { addItem} = useActions()
-  const { id, img, brandId, name, price } = product
+  const { id, img, brandId, typeId, name, price } = product
 
   return (
     <div >
@@ -31,7 +31,7 @@ const Product = ({ product }: any) => {
               width={400}
               height={400}
               alt="product"
-              
+              priority
             />
           </div>
         </div>
@@ -60,7 +60,7 @@ const Product = ({ product }: any) => {
       </div>
       <div>
         <div className="text-sm capitalize text-gray-500 mb-1">
-          {brandId === 1 ? 'Samsung' : 'Apple'}
+          Brand: {brandId} type: {typeId}
         </div>
         <Link href={`/products/${id}`}>
           <h2 className="font-semibold mb-1">{name}</h2>
