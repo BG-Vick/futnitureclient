@@ -91,7 +91,7 @@ export default function Types() {
         font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 
         text-center"
           >
-            {`${addType ? 'Скрыть' : 'Добавить тип'}`}
+            {`${addType ? 'Скрыть' : 'Добавить категорию'}`}
           </button>
 
           {addType && (
@@ -104,7 +104,7 @@ export default function Types() {
             text-gray-900 text-sm rounded-lg   p-2.5
             "
                 value={typeState}
-                placeholder="Добавьте тип"
+                placeholder="Добавьте категорию"
                 required
               />
 

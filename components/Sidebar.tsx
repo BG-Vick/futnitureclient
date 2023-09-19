@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useTypedSelector } from '@/hooks/useTypedSelector'
 import { IoMdArrowForward } from 'react-icons/io'
 import { FiTrash2 } from 'react-icons/fi'
@@ -7,11 +8,16 @@ import CartItem from './CartItem'
 import { ICart } from '@/models/models'
 import { useActions } from '@/hooks/redux'
 import Link from 'next/link'
+import axios from 'axios'
+import { ModalSendOrder } from './ModalSendOrder'
+import clsx from 'clsx'
 
 
 
 const Sidebar = () => {
-  const isOpen = useTypedSelector((state) => state.sidebar) // ok200
+
+  const [modalVisible, setModalVisible] = useState(false)
+  const isOpen = useTypedSelector((state) => state.sidebar)
   const cart: ICart[] = useTypedSelector((state) => state.cart)
   const { clearCard } = useActions()
   const dispatch = useDispatch()
@@ -21,6 +27,8 @@ const Sidebar = () => {
   const total = cart.reduce((accumulator, currentItem) =>{
     return +accumulator + (currentItem.count * currentItem.price)
   },0)
+
+
 
   return (
     <div
@@ -32,14 +40,13 @@ const Sidebar = () => {
         <div className="uppercase text-sm font-semibold">
           Корзина ({cartAmount})
         </div>
-        
         <div
           onClick={() => {
             dispatch(setSidebarState())
           }}
-          className="cursor-pointer w-8 h-8 flex justify-center items-center"
+          className="cursor-pointer w-10 h-10 border border-black flex justify-center items-center rounded-lg  hover:bg-gray-300 animate-bounce"
         >
-          <IoMdArrowForward className="text-2xl" />
+          <IoMdArrowForward className="text-2xl text-black w-6 h-6" />
         </div>
       </div>
       <div className=" flex flex-col gap-y-2 h-[400px] overflow-y-auto overflow-x-hidden border-b"> 
@@ -56,16 +63,19 @@ const Sidebar = () => {
           
           <div
             onClick={() => clearCard()}
-            className="cursor-pointer py-4 bg-red-500 text-white 
-                w-12 h-12 flex justify-center items-center text-xl"
+            className={clsx(cart.length && 'bg-red-500 hover:bg-red-800 cursor-pointer', 'bg-gray-300  py-4   text-white w-12 h-12 flex justify-center items-center text-xl')}
           >
             <FiTrash2 />
           </div>
         </div>
-        <Link href={'/'} className='bg-primary flex p-4 justify-center items-center text-white w-full font-medium'  >
+        <button 
+        disabled={!cart.length}
+        onClick={() => {setModalVisible(true)}}
+        className={clsx(cart.length ? 'bg-white text-black border-black border-2 hover:bg-primary hover:text-white' : 'text-white', 'bg-gray-300 flex p-4 justify-center items-center  w-full font-medium'  )}>
             Оформить заказ
-        </Link> 
+        </button>
       </div>
+      <ModalSendOrder isVisible={modalVisible} onClose={setModalVisible} cart={cart}/>
     </div>
   )
 }

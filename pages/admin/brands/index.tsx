@@ -86,7 +86,7 @@ export default function Brands() {
         font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 
         text-center"
           >
-            {`${addBrand ? 'Скрыть' : 'Добавить бренд'}`}
+            {`${addBrand ? 'Скрыть' : 'Добавить магазин'}`}
           </button>
 
           {addBrand && (
@@ -99,7 +99,7 @@ export default function Brands() {
             text-gray-900 text-sm rounded-lg p-2.5
             "
                 value={brandState}
-                placeholder="Добавьте тип"
+                placeholder="Добавьте магазин"
                 required
               />
 

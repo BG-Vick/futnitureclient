@@ -63,12 +63,12 @@ const AdminHeader = () => {
       <Link
       className={clsx(activeLink.brands === pathname && 'bg-blue-200', 'cursor-pointer hover:bg-gray-100 p-4 rounded-lg')}
       href={'/admin/brands'}>
-        Бренды
+        Магазины
       </Link>
       <Link
       className={clsx(activeLink.types === pathname && 'bg-blue-200', 'cursor-pointer hover:bg-gray-100 p-4 rounded-lg')}
       href={'/admin/types'}>
-       Типы
+       Категория
       </Link>
 
       <div

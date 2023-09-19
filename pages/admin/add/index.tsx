@@ -53,6 +53,7 @@ export default function AddProduct() {
   const [visibleBrand, setVisibleBrand] = useState(false)
   const [name, setName] = useState('')
   const [price, setPrice] = useState<number | string>('')
+  const [art, setArt] = useState<number | string>('')
   const [file, setFile] = useState('')
   const [info, setInfo] = useState<any>([])
 
@@ -91,6 +92,7 @@ export default function AddProduct() {
     formData.append('name', name)
     formData.append('price', `${price}`)
     formData.append('img', file)
+    formData.append('art', art)
     formData.append('brandId', selectedBrand.id)
     formData.append('typeId', selectedType.id)
     formData.append('info', JSON.stringify(info))
@@ -103,6 +105,7 @@ export default function AddProduct() {
       .catch((e) => alert(e?.response?.data?.message || e))
   }
   function stateRefresh(){
+    setArt("")
     setName("")
     setPrice("")
     setFile('')
@@ -202,6 +205,23 @@ export default function AddProduct() {
               />
             </label>
           </div>
+
+          {/* art */}
+          <div>
+            <label className="block mb-2 ">
+            <p className='mb-1 ml-1'>Артикул</p>
+              <input
+              onChange={(e) => setArt(Number(e.target.value))} 
+                type="number"
+                className={clsx(!!art &&"bg-green-100","bg-blue-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500  focus:bg-gray-50 block w-full p-2.5  ")}
+                 value={art}
+                 placeholder='должен быть уникальным'
+                required
+              />
+            </label>
+          </div>
+
+          {/* art */}
 
           <label className="block mb-2 ">
           <p className='mb-1 ml-1'>Изображение</p>
