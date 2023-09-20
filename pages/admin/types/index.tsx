@@ -16,6 +16,12 @@ import { parseCookies } from 'nookies'
 import { check } from '@/store/fakeHTTP'
 import { setUserState } from '@/store/reducers/userSlice'
 import Link from 'next/link'
+import { useForm } from 'react-hook-form'
+import clsx from 'clsx'
+
+interface IAddTypeFormInput {
+  addNewType: string
+}
 
 
 
@@ -37,16 +43,35 @@ wrapper.getServerSideProps((store) => async (ctx) => {
 
 export default function Types() {
   const [addType, setAddType] = useState(false)
-  const [typeState, setTypeState] = useState('')
   const [modalVisible, setModalVisible] = useState<number | false>(false)
   const [refresh, setRefresh] = useState(false)
-
   const [types, setTypes] = useState([])
-  
   const user = useTypedSelector(state => state.user)
 
 
-
+const {
+  register,
+  handleSubmit,
+  reset,
+  formState: { errors, isValid },
+} = useForm<IAddTypeFormInput>({
+  mode: 'onChange',
+  defaultValues: {
+    addNewType: '',
+  },
+})
+const onSubmit = async (data: IAddTypeFormInput) => {
+  const { addNewType } = data
+  createType({ name: addNewType })
+  .then((data) => {
+    console.log(data)
+    reset({
+      addNewType: '',
+    })
+    setRefresh(!refresh)
+  })
+  .catch((e) => alert(e.response.data.message))
+}
 
   useEffect(() => {
     if (modalVisible === false) {
@@ -54,15 +79,7 @@ export default function Types() {
     }
   }, [modalVisible, refresh])
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    createType({ name: typeState })
-      .then((data) => {
-        setTypeState('')
-        setRefresh(!refresh)
-      })
-      .catch((e) => alert(e.response.data.message))
-  }
+
 
 
   if(user.role !== 'ADMIN')   return (
@@ -95,28 +112,30 @@ export default function Types() {
           </button>
 
           {addType && (
-            <div className="w-[800px] flex justify-between items-baseline gap-1 mt-3">
+            <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="w-[800px] flex flex-col justify-between items-baseline gap-1 mt-3 ">
               <input
-                onChange={(e) => setTypeState(e.target.value)}
                 type="text"
-                id="first_name"
-                className="bg-gray-50 border grow border-gray-300 
-            text-gray-900 text-sm rounded-lg   p-2.5
-            "
-                value={typeState}
-                placeholder="Добавьте категорию"
-                required
+                className="bg-gray-50 border grow border-gray-300 w-full
+              text-gray-900 text-sm rounded-lg p-2.5
+                "
+                {...register('addNewType', {
+                  required: 'Please enter text',
+                })}
+                placeholder="Добавьте магазин"
               />
-
+              {errors.addNewType && (
+                    <p className="text-red-500">Поле не может быть пустым</p>
+                  )}
               <button
-                onClick={(e) => handleSubmit(e)}
-                className="text-white mt-2 bg-blue-500 hover:bg-blue-800 
-        font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 
-        text-center"
+                type='submit'
+                disabled={!isValid}
+                className={clsx(isValid ? "bg-blue-500 hover:bg-blue-800" : "bg-gray-200" , "text-white mt-2  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center")}
               >
                 Применить
               </button>
             </div>
+            </form>
           )}
 
           <ul className=" mt-10 w-[800px] text-lg font-semibold text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">

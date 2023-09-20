@@ -10,11 +10,6 @@ import { fetchOneDevice } from '@/store/typesApi'
 
 
 
-
-
-
-
-
 export const getServerSideProps = async (ctx: any) => {
   const { id } = ctx.params
   const product = await fetchOneDevice(id)
@@ -48,7 +43,7 @@ const OneProduct = ({ product }: any) => {
           <div className='flex flex-1 justify-center items-center mb-8 lg:mb-0'>
           <Image
               className="w-full h-full   max-w-[300px] lg:max-w-md sm:max-w-[350px] object-cover"
-              src={'http://localhost:7000/' + img}
+              src={`http://${process.env.NEXT_PUBLIC_DB_HOST}:${process.env.NEXT_PUBLIC_PORT}/` + img}
               width={400}
               height={400}
               alt="product"

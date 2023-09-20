@@ -36,6 +36,7 @@ export interface IProduct {
   updatedAt: string;
   typeId: number;
   brandId: number;
+  info?: IInfo[] 
 }
 
 
@@ -51,4 +52,31 @@ export interface ICart {
   updatedAt: string;
   typeId: number;
   brandId: number;
+}
+
+
+export interface IAddDeviceFormInput {
+  selectedType: string
+  selectedBrand: string
+  name: string
+  price: string
+  art: string
+  file: any
+}
+
+export interface IBrand {
+  id: number
+  name: string
+}
+
+export interface IType {
+  id: number
+  name: string
+}
+
+export interface IInfo {
+  title: string
+  description: string
+  number?: number 
+  id?: number 
 }

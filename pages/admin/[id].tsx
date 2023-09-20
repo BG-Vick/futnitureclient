@@ -1,11 +1,10 @@
 import { useTypedSelector } from '@/hooks/useTypedSelector'
 import axios from 'axios'
 import Image from 'next/image'
-import { ICart } from '@/models/models'
+import { IBrand, ICart, IType } from '@/models/models'
 import { useActions } from '@/hooks/redux'
 import Layout from '@/components/Layout'
 import { fetchBrands, fetchOneDevice, fetchTypes } from '@/store/typesApi'
-import { EditForm } from '@/components/EditForm'
 import { useState } from 'react'
 import EditForms from '@/components/EditForms'
 import clsx from 'clsx'
@@ -20,12 +19,9 @@ import { check } from '@/store/fakeHTTP'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import Link from 'next/link'
+import { IProduct } from '@/models/models'
 
 
-
-
-
-/////////////////////////////////////////////////////////////////////////
 
 
 export const getServerSideProps: GetServerSideProps =
@@ -51,12 +47,15 @@ export const getServerSideProps: GetServerSideProps =
     }
   }) 
 
+interface IOneProductProps {
+  product: IProduct
+  types : IType[]
+  brands: IBrand[]
+}
 
-
-const OneProduct = ({ product, types, brands }: any) => {
-  const [edit, setEdit] = useState(false)
+const OneProduct = ({ product, types, brands }:IOneProductProps) => {
+  const [edit, setEdit] = useState<boolean>(false)
   const user = useTypedSelector(state => state.user)
-  const router = useRouter()
 
 
 
@@ -104,7 +103,7 @@ const OneProduct = ({ product, types, brands }: any) => {
           <div className='flex-1 text-center lg:text-left'>
             <h1 className='text-[26px] font-medium mb-2 max-w-[450px] mx-auto lg:mx-0'>{name}</h1>
             <div className='text-xl text-red-500 font-medium mb-6'>$ {price}</div>
-            <div className='mb-8 border'>{info.map(i => 
+            <div className='mb-8 border'>{info && info.map(i => 
               <div key={i.id}>
                 <p> Хар-ка: {i.title}</p>
                 <p>Опис-е: {i.description}
@@ -130,9 +129,8 @@ const OneProduct = ({ product, types, brands }: any) => {
                 actualType={actualType}
                 actualBrand={actualBrand}
                 setEdit={setEdit}
-                edit={edit}
                 name={name}
-                price={price}
+                price={price.toString()}
                 info={info}
                 id={id}
             />} 

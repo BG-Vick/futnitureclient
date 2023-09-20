@@ -4,53 +4,73 @@ import { setSidebarState } from '@/store/reducers/sidebarSlice'
 import { updateBrand } from '@/store/typesApi'
 import axios from 'axios'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useId, useState, MouseEvent } from 'react'
+import { useForm } from 'react-hook-form'
 import { BiLogoTelegram } from 'react-icons/bi'
 import { useDispatch } from 'react-redux'
 
+enum CommunicationEnum {
+  Telegram = 'Telegram',
+  Watsapp = 'Watsapp',
+  Viber = 'Viber',
+  Phone = 'Phone',
+}
 
-
+interface IOrderFormInput {
+  tel: string
+  communication: CommunicationEnum
+}
 
 export function ModalSendOrder({ isVisible, onClose, cart }: any) {
   const dispatch = useDispatch()
-  const [phoneNumber, setPhoneNumber] = useState('')
-  const [communication, setCommunication] = useState('')
-  const URL_ENV = 'http://localhost:3000/api'
-  const  { clearCard } = useActions()
+  const { clearCard } = useActions()
+  const id = useId()
 
-  const handleClose = (e) => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isValid },
+  } = useForm<IOrderFormInput>({
+    mode: 'onChange',
+  })
+
+
+  const handleClose = (e: MouseEvent) => {
     if (e.target.id === 'wrapper') onClose(false)
   }
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-     const orederJSON = JSON.stringify(cart)
-      try {
-        const res = await axios.post(`${URL_ENV}/order`, {
-          order: orederJSON,
-          phoneNumber,
-          communication,
+  const onSubmit = async (data: IOrderFormInput) => {
+    const { communication, tel } = data
+    const orederJSON = JSON.stringify(cart)
+    try {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}/api/order`, {
+        order: orederJSON,
+        tel,
+        communication,
+      })
+      if (res.status === 200) {
+        reset({
+          tel: '',
         })
-        if(res.status === 200){
-            setPhoneNumber('')
-            clearCard()
-            alert(res.data.message)
-            dispatch(setSidebarState())
-            
-        }
-      } catch (e) {
-        alert(e.response.data.message)
-      } 
-
+        clearCard()
+        alert(res.data.message)
+        dispatch(setSidebarState())
+      }
+    } catch (e) {
+      console.log(e)
+      
+        alert(e.message)
+      
+      
+    }
     onClose(false)
   }
-
-
 
   if (!isVisible) return null
 
   return (
     <div
-      onClick={handleClose}
+      onClick={(e) => handleClose(e)}
       id="wrapper"
       className="z-50 fixed inset-0 bg-slate-900/60 backdrop-blur-sm  flex justify-center items-center"
     >
@@ -63,41 +83,58 @@ export function ModalSendOrder({ isVisible, onClose, cart }: any) {
         </button>
         <div className="bg-white p-2 rounded">
           <div className="p-6">
-            <p className='mb-6'>Пожалуйста заполните форму обратной связи</p>
-            <form>
+            <p className="mb-6">Пожалуйста заполните форму обратной связи</p>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div>
-                 <div>
-                <p>Выберите способ связи</p>
+                <div>
+                  <label htmlFor={`${id}--select`}>Выберите способ связи</label>
                   <select
-                  className='mt-2 outline-none block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500'
-                  name='select'
-                  value={communication}
-                  onChange={(e) => setCommunication(e.target.value)}
+                  id={`${id}--select`}
+                    className="mt-2 outline-none block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                    {...register('communication', { required: true })}
                   >
                     <option value="Telegram">Telegram</option>
                     <option value="Whatsapp">Whatsapp</option>
                     <option value="Viber">Viber</option>
-                    <option value="Звонок">Звонок</option>
-                </select>
-                </div> 
+                    <option value="Phone">Phone</option>
+                  </select>
+                  {errors.communication && (
+                    <p className="text-red-600">
+                      поле должно быть заполнено
+                    </p>
+                  )}
+                </div>
                 <div>
-                <p>Введите номер телефона</p>
+                  <label htmlFor={`${id}--tel`}>Введите номер телефона</label>
                   <input
-                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    {...register('tel', {
+                      required: true,
+                      pattern:
+                        /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
+                    })}
                     type="text"
-                    id="first_name"
+                    id={`${id}--tel`}
                     className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 
                     text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                    value={phoneNumber}
-                    placeholder="Введите номер телефона"
+                    placeholder="9618444155"
                     required
                   />
+                  {errors.tel && (
+                    <p className="text-red-600">
+                      Поле должно содержать 10 цифровых символов
+                    </p>
+                  )}
                 </div>
               </div>
               <button
-                disabled={!phoneNumber || !communication || !cart.length}
-                onClick={(e) => handleSubmit(e)}
-                className={clsx(phoneNumber && communication && cart.length && "bg-blue-600 hover:bg-blue-800 ", "bg-gray-200 text-white mt-2   focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center")}
+                type="submit"
+                disabled={!isValid}
+                className={clsx(
+                  isValid
+                    ? 'bg-blue-600 hover:bg-blue-800'
+                    : 'bg-gray-200',
+                  '  text-white mt-2   focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center'
+                )}
               >
                 Отправить
               </button>
