@@ -101,12 +101,3 @@ export function ModalType({ isVisible, onClose }: any) {
     </div>
   )
 }
-
-/* const handleSubmit = (e) => {
-  e.preventDefault()
-  updateType(type, isVisible).then(data => {
-    setType('')
-    onClose(false)
-  }).catch(e => alert(e))
-  
-} */

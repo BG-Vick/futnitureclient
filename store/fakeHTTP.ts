@@ -14,7 +14,7 @@ export function getCookie(name: string) {
 }
 
 export const $host = axios.create({
-  baseURL: 'http://localhost:7000',
+  baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
 })
 
 
@@ -73,30 +73,3 @@ export const getAllProducts = async ({typeId, brandId, page, limit, name}: IQuer
   return data
 } 
 
-
-
-//`Bearer ${localStorage.getItem('token')}`
-//localStorage.setItem('token', data.token)
-//localStorage.setItem('token', data.token)
-//localStorage.removeItem('token');
-
-
-/* export const authInterceptor = (config) => {
-  config.headers.authorization = `Bearer ${getCookie('token')}`
-  return config
-}
-
-$authHost.interceptors.request.use(authInterceptor) */
-
-
-/* export const check = async () => {
-  const { data } = await $authHost.get('api/user/auth')
-  setCookie(null, 'token', data.token, {
-    maxAge: 30 * 24 * 60 * 60,
-  })
-  return jwt_decode(data.token)
-} */
-
-/* export const $authHost = axios.create({
-  baseURL: 'http://localhost:7000',
-}) */

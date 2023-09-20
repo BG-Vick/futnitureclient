@@ -1,7 +1,7 @@
-//   JSON2ts    create interface
+
 
 /************************** */
-//    КОСТЫЛЬ ПЕРЕДАЮ ПУСТУЮ СТРОКУ ЧТОБЫ НА СЕРВЕРЕ ОНА БЫЛА FALSE
+
 export interface IQuery {
   limit: number
   page: number

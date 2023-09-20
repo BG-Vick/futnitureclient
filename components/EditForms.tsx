@@ -9,13 +9,12 @@ import { useForm } from 'react-hook-form'
 
 interface IEditFormProps {
   setEdit: (edit: boolean) => void
-  edit: boolean
   name: string
   price: string 
   types: IType[]
   brands: IBrand[]
-  actualType: IType 
-  actualBrand: IBrand 
+  actualType: IType | undefined
+  actualBrand: IBrand | undefined
   info: IInfo[] | undefined
   id: number
 }
@@ -68,8 +67,8 @@ export default function EditForms({
     defaultValues: {
       name,
       price,
-      brandId: actualBrand.id.toString(),
-      typeId: actualType.id.toString(),
+      brandId: actualBrand && actualBrand.id.toString(),
+      typeId: actualType && actualType.id.toString(),
     },
   })
 

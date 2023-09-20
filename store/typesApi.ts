@@ -3,17 +3,18 @@ import jwt_decode from 'jwt-decode'
 import { parseCookies, setCookie, destroyCookie } from 'nookies'
 import { config } from 'process'
 import { getCookie } from './fakeHTTP'
+import { IBrand, IType } from '@/models/models'
 
 
 export const $authHost = axios.create({
-    baseURL: 'http://localhost:7000',
+    baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
   })
 
 export const $host = axios.create({
-  baseURL: 'http://localhost:7000',
+  baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
 })
 
-export const authInterceptor = (config) => {
+export const authInterceptor = (config: any) => {
     config.headers.authorization = `Bearer ${getCookie('token')}`
     return config
   }
@@ -24,7 +25,7 @@ $authHost.interceptors.request.use(authInterceptor)
 //////////////////////////////////////////////////            Type                   ///////////////////////////////////////////////////////
 
 
-export const createType = async (type) => {
+export const createType = async (type: {name: string}) => {
   const { data } = await $authHost.post('api/types', type)
   return data
 }
@@ -40,7 +41,7 @@ export const deleteType = async (id: number) => {
 }
 
 
-export const updateType = async (name: string, id: number) => {   //working!!!
+export const updateType = async (name: string, id: number) => {   
   const { data } = await $authHost.patch('api/types', {
     name,
     id
@@ -54,7 +55,7 @@ export const updateType = async (name: string, id: number) => {   //working!!!
 
 
 
-export const createBrand = async (brand) => {
+export const createBrand = async (brand: IBrand) => {
     const { data } = await $authHost.post('api/brand', brand)
     return data
 }
@@ -165,23 +166,5 @@ export const fetchAllDevice = async ({brandId ='', typeId ='', limit= 9, page=1}
 
 
 
-  //`Bearer ${localStorage.getItem('token')}`
-//localStorage.setItem('token', data.token)
-//localStorage.setItem('token', data.token)
-//localStorage.removeItem('token');
-
-
-/*  */
-
-
-/* export const check = async () => {
-  const { data } = await $authHost.get('api/user/auth')
-  setCookie(null, 'token', data.token, {
-    maxAge: 30 * 24 * 60 * 60,
-  })
-  return jwt_decode(data.token)
-} */
-
-/*  */
 
 

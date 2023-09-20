@@ -66,14 +66,12 @@ const Products = ({ count }: any) => {
 
   useEffect(() => {
     if (ref.current > 2) {
-      // ref > 2 prevent fetching when component mounted first time
       if (search) {
         setRefreshPage(false)
         setTypeIdState('')
         setBrandIdState('')
         setPage(1)
         const debounce = setTimeout(() => {
-          console.log('Поисковая строка в деле')
           getAllProducts({
             typeId: '',
             brandId: '',
@@ -93,92 +91,77 @@ const Products = ({ count }: any) => {
     ref.current++
   }, [search, dispatch])
 
-
-
-
   useEffect(() => {
     if (ref.current > 2) {
-      if( page === 1 && refreshPage === false ){
+      if (page === 1 && refreshPage === false) {
         return
       } else {
         setRefreshPage(true)
-      // ref > 2 prevent fetching when component mounted first time
-      if (!brandIdState && !typeIdState && !search) {
-        console.log(`ПЕРЕКЛЮЧЕНИЕ СТРАНИЦ без других параметров`)
-        getAllProducts({
-          typeId: '',
-          brandId: '',
-          page: page,
-          limit: 10,
-          name: '',
-        })
-          .then((data) => {
-            setCountState(data.count)
-            dispatch(setProductState(data.rows))
+        if (!brandIdState && !typeIdState && !search) {
+          getAllProducts({
+            typeId: '',
+            brandId: '',
+            page: page,
+            limit: 10,
+            name: '',
           })
-          .catch((e) => console.log(e))
-      }
+            .then((data) => {
+              setCountState(data.count)
+              dispatch(setProductState(data.rows))
+            })
+            .catch((e) => console.log(e))
+        }
 
-      ///////////////////////////////////////////////////////////////////////////////////////
-
-      if (!brandIdState && !typeIdState && search) {
-        console.log(' ПЕРЕКЛЮЧЕНИЕ СТРАНИЦ с учетом поисковой строки')
-        getAllProducts({
-          typeId: '',
-          brandId: '',
-          page: page,
-          limit: 10,
-          name: search,
-        })
-          .then((data) => {
-            setCountState(data.count)
-            dispatch(setProductState(data.rows))
+        if (!brandIdState && !typeIdState && search) {
+          getAllProducts({
+            typeId: '',
+            brandId: '',
+            page: page,
+            limit: 10,
+            name: search,
           })
-          .catch((e) => console.log(e))
-      }
-      //////////////////////////////////////////////////////////////////////////////////////////
+            .then((data) => {
+              setCountState(data.count)
+              dispatch(setProductState(data.rows))
+            })
+            .catch((e) => console.log(e))
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////
 
-      if (!typeIdState && !search && brandIdState) {
-        console.log('ПЕРЕХОД ПО СТРАНИЦАМ с учетом бренда!')
-        getAllProducts({
-          typeId: '',
-          brandId: brandIdState,
-          page: page,
-          limit: 10,
-          name: '',
-        })
-          .then((data) => {
-            setCountState(data.count)
-            dispatch(setProductState(data.rows))
+        if (!typeIdState && !search && brandIdState) {
+          getAllProducts({
+            typeId: '',
+            brandId: brandIdState,
+            page: page,
+            limit: 10,
+            name: '',
           })
-          .catch((e) => console.log(e))
-      }
+            .then((data) => {
+              setCountState(data.count)
+              dispatch(setProductState(data.rows))
+            })
+            .catch((e) => console.log(e))
+        }
 
-      //////////////////////////////////////////////////////////////////////////////////////
-      if (!brandIdState && !search && typeIdState) {
-        console.log('ПЕРЕХОД ПО СТРАНИЦАМ с учетом типа')
-        getAllProducts({
-          typeId: typeIdState,
-          brandId: '',
-          page: page,
-          limit: 10,
-          name: '',
-        })
-          .then((data) => {
-            setCountState(data.count)
-            dispatch(setProductState(data.rows))
+        //////////////////////////////////////////////////////////////////////////////////////
+        if (!brandIdState && !search && typeIdState) {
+          getAllProducts({
+            typeId: typeIdState,
+            brandId: '',
+            page: page,
+            limit: 10,
+            name: '',
           })
-          .catch((e) => console.log(e))
+            .then((data) => {
+              setCountState(data.count)
+              dispatch(setProductState(data.rows))
+            })
+            .catch((e) => console.log(e))
+        }
       }
     }
-  }
     ref.current++
   }, [page])
-
-  console.log(`page >> ${page}`)
-  console.log(`brandId >> ${brandIdState}`)
-  console.log(`typedId >> ${typeIdState}`)
-  console.log(`search >> ${search}`)
 
   const handleType = async (id: number) => {
     setRefreshPage(false)
@@ -210,12 +193,11 @@ const Products = ({ count }: any) => {
       page: 1,
       limit: 10,
     })
-    console.log(`запрос продуктов по бренду`)
     setCountState(data.count)
     dispatch(setProductState(data.rows))
   }
 
-  ////////////////////////////////////////////////////
+  
   const handleDropdown = () => {
     setDropdownActive(!dropdownActive)
     if (!dropdownActive) {

@@ -18,10 +18,11 @@ import { setUserState } from '@/store/reducers/userSlice'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import clsx from 'clsx'
+import { IType } from '@/models/models'
 
-interface IAddTypeFormInput {
+ interface IAddTypeFormInput {
   addNewType: string
-}
+} 
 
 
 
@@ -45,7 +46,7 @@ export default function Types() {
   const [addType, setAddType] = useState(false)
   const [modalVisible, setModalVisible] = useState<number | false>(false)
   const [refresh, setRefresh] = useState(false)
-  const [types, setTypes] = useState([])
+  const [types, setTypes] = useState<IType[]>([])
   const user = useTypedSelector(state => state.user)
 
 
@@ -62,9 +63,9 @@ const {
 })
 const onSubmit = async (data: IAddTypeFormInput) => {
   const { addNewType } = data
+  console.log(addNewType)
   createType({ name: addNewType })
   .then((data) => {
-    console.log(data)
     reset({
       addNewType: '',
     })

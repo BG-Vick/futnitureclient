@@ -1,9 +1,9 @@
- import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+/*  import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { IProducts, IProduct, IQuery } from '@/models/models'
 
 export const deviceApi = createApi({
   reducerPath: 'devicesApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:7000/api' }),
+  baseQuery: fetchBaseQuery({ baseUrl: `${process.env.NEXT_PUBLIC_SERVER_URL}/api` }),
   tagTypes: ['Device'],
   endpoints: (build) => ({
     getAllDevices: build.query<IProducts, IQuery>({ 
@@ -69,3 +69,4 @@ export const {
   useDeleteDeviceMutation,
   useDeleteOneDeviceQuery
 } = deviceApi
+ */
