@@ -1,13 +1,12 @@
 import { useActions } from '@/hooks/redux'
-import { useTypedSelector } from '@/hooks/useTypedSelector'
 import { setSidebarState } from '@/store/reducers/sidebarSlice'
-import { updateBrand } from '@/store/typesApi'
-import axios from 'axios'
 import clsx from 'clsx'
-import { useId, useState, MouseEvent } from 'react'
+import { useId } from 'react'
 import { useForm } from 'react-hook-form'
-import { BiLogoTelegram } from 'react-icons/bi'
 import { useDispatch } from 'react-redux'
+import axios, {AxiosError} from 'axios';
+import { ICart } from '@/models/models'
+
 
 enum CommunicationEnum {
   Telegram = 'Telegram',
@@ -16,12 +15,18 @@ enum CommunicationEnum {
   Phone = 'Phone',
 }
 
+interface IModalSendOrderProps {
+  isVisible: boolean
+  onClose: (arg0: boolean) => void
+  cart: ICart[]
+}
+
 interface IOrderFormInput {
   tel: string
   communication: CommunicationEnum
 }
 
-export function ModalSendOrder({ isVisible, onClose, cart }: any) {
+export function ModalSendOrder({ isVisible, onClose, cart }: IModalSendOrderProps) {
   const dispatch = useDispatch()
   const { clearCard } = useActions()
   const id = useId()
@@ -36,8 +41,9 @@ export function ModalSendOrder({ isVisible, onClose, cart }: any) {
   })
 
 
-  const handleClose = (e: MouseEvent) => {
-    if (e.target.id === 'wrapper') onClose(false)
+  const handleClose = (e: React.SyntheticEvent) => {
+    const target = e.target as HTMLElement
+    if (target.id === 'wrapper') onClose(false)
   }
   const onSubmit = async (data: IOrderFormInput) => {
     const { communication, tel } = data
@@ -56,12 +62,11 @@ export function ModalSendOrder({ isVisible, onClose, cart }: any) {
         alert(res.data.message)
         dispatch(setSidebarState())
       }
-    } catch (e) {
+    } catch (e: unknown) {
       console.log(e)
-      
+      if(e instanceof AxiosError){
         alert(e.message)
-      
-      
+      }
     }
     onClose(false)
   }

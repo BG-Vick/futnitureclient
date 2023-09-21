@@ -1,9 +1,8 @@
-import { store, wrapper } from '@/store/store'
+import { wrapper } from '@/store/store'
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { Provider } from 'react-redux'
 import { FC } from 'react'
-import Layout from '@/components/Layout'
 
 const MyApp: FC<AppProps> = ({ Component, ...rest }) => {
   const { store, props } = wrapper.useWrappedStore(rest)

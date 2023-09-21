@@ -3,22 +3,21 @@ import Footer from '@/components/Footer'
 import { ModalBrand } from '@/components/ModalBrand'
 import { useTypedSelector } from '@/hooks/useTypedSelector'
 import { createBrand, fetchBrands, deleteBrand } from '@/store/typesApi'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
 import { wrapper } from '@/store/store'
 import { parseCookies } from 'nookies'
-import { check } from '@/store/fakeHTTP'
+import { check } from '@/store/typesApi'
 import { setUserState } from '@/store/reducers/userSlice'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import clsx from 'clsx'
+import { IBrand } from '@/models/models'
+import type { GetServerSideProps } from 'next'
 
 
 interface IAddBrandFormInput {
   addNewBrand: string
 }
-
 
 
 export const getServerSideProps: GetServerSideProps =
@@ -37,7 +36,7 @@ wrapper.getServerSideProps((store) => async (ctx) => {
 
 
 export default function Brands() {
-  const [brands, setBrands] = useState([])
+  const [brands, setBrands] = useState<IBrand[]>([])
   const [addBrand, setAddBrand] = useState(false)
   const [modalVisible, setModalVisible] = useState<number | false>(false)
   const [refresh, setRefresh] = useState(false)
@@ -113,6 +112,7 @@ const onSubmit = async (data: IAddBrandFormInput) => {
                 "
                 {...register('addNewBrand', {
                   required: 'Please enter text',
+                  maxLength: 250,
                 })}
                 placeholder="Добавьте магазин"
               />

@@ -1,27 +1,18 @@
 import AdminHeader from '@/components/AdminHeader'
 import Footer from '@/components/Footer'
-import { ModalType } from '@/components/ModalType'
 import { useTypedSelector } from '@/hooks/useTypedSelector'
-import {
-  createDevice,
-  createType,
-  fetchBrands,
-  fetchTypes,
-} from '@/store/typesApi'
 import clsx from 'clsx'
-import { useRouter } from 'next/router'
-import { type } from 'os'
 import { useEffect, useState } from 'react'
 import { AiOutlineCloudUpload } from 'react-icons/ai'
-import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
 import { wrapper } from '@/store/store'
 import { parseCookies } from 'nookies'
-import { check } from '@/store/fakeHTTP'
+import { check } from '@/store/typesApi'
 import { setUserState } from '@/store/reducers/userSlice'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
-import { IAddDeviceFormInput, IBrand, IType, IInfo} from '@/models/models'
-
+import { IAddDeviceFormInput, IBrand, IType, IInfo } from '@/models/models'
+import { createDevice, fetchBrands, fetchTypes } from '@/store/typesApi'
+import type { GetServerSideProps } from 'next'
 
 export const getServerSideProps: GetServerSideProps =
   wrapper.getServerSideProps((store) => async (ctx) => {
@@ -39,7 +30,7 @@ export const getServerSideProps: GetServerSideProps =
 export default function AddProduct() {
   const [types, setTypes] = useState<IType[]>([])
   const [brands, setBrands] = useState<IBrand[]>([])
-  const [info, setInfo] = useState<IInfo[]>([])
+  const [infoArr, setInfo] = useState<IInfo[]>([])
   const user = useTypedSelector((state) => state.user)
 
   const {
@@ -59,7 +50,7 @@ export default function AddProduct() {
     formData.append('art', art)
     formData.append('brandId', selectedBrand)
     formData.append('typeId', selectedType)
-    formData.append('info', JSON.stringify(info))
+    formData.append('info', JSON.stringify(infoArr))
     createDevice(formData)
       .then((data) => {
         setInfo([])
@@ -82,15 +73,17 @@ export default function AddProduct() {
   }, [])
 
   const addInfo = () => {
-    setInfo([...info, { title: '', description: '', number: Date.now() }])
+    setInfo([...infoArr, { title: '', description: '', number: Date.now() }])
   }
 
   const removeInfo = (number: number) => {
-    setInfo(info.filter((i) => i.number !== number))
+    setInfo(infoArr.filter((i) => i.number !== number))
   }
 
   const changeInfo = (key: string, value: string, number: number) => {
-    setInfo(info.map((i) => (i.number === number ? { ...i, [key]: value } : i)))
+    setInfo(
+      infoArr.map((i) => (i.number === number ? { ...i, [key]: value } : i))
+    )
   }
 
   if (user.role !== 'ADMIN')
@@ -119,17 +112,16 @@ export default function AddProduct() {
       >
         <div className="flex flex-col  w-[800px] self-center mt-6 ">
           <div>
-            <label className="block mb-2 mt-6" htmlFor={`selectType`}>Выберите категорию</label>
+            <label className="block mb-2 mt-6" htmlFor={`selectType`}>
+              Выберите категорию
+            </label>
             <select
               id={`selectType`}
               className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:bg-gray-50 focus:border-blue-500 block w-full p-2.5  "
               {...register('selectedType', { required: true })}
             >
               {types.map((type) => (
-                <option
-                  key={type.id}
-                  value={type.id}
-                >
+                <option key={type.id} value={type.id}>
                   {type.name}
                 </option>
               ))}
@@ -141,17 +133,16 @@ export default function AddProduct() {
 
           <div>
             <div>
-              <label className="block mb-2 mt-6" htmlFor={`selectBrand`}>Выберите магазин</label>
+              <label className="block mb-2 mt-6" htmlFor={`selectBrand`}>
+                Выберите магазин
+              </label>
               <select
                 id={`selectBrand`}
                 className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:bg-gray-50 focus:border-blue-500 block w-full p-2.5  "
                 {...register('selectedBrand', { required: true })}
               >
                 {brands.map((brand) => (
-                  <option
-                    key={brand.id}
-                    value={brand.id}
-                  >
+                  <option key={brand.id} value={brand.id}>
                     {brand.name}
                   </option>
                 ))}
@@ -173,6 +164,7 @@ export default function AddProduct() {
                 className="bg-white  border border-gray-300 text-gray-900 text-sm rounded-lg focus:bg-gray-50 focus:border-blue-500 block w-full p-2.5  "
                 {...register('name', {
                   required: 'Please enter name',
+                  maxLength: 250,
                 })}
               />
               {errors.name && (
@@ -189,6 +181,7 @@ export default function AddProduct() {
                 className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:bg-gray-50 focus:border-blue-500 block w-full p-2.5  "
                 {...register('price', {
                   required: 'Please enter text',
+                  maxLength: 250,
                 })}
               />
               {errors.price && (
@@ -206,6 +199,7 @@ export default function AddProduct() {
                 className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:bg-gray-50 focus:border-blue-500 block w-full p-2.5  "
                 {...register('art', {
                   required: 'Please enter articul number',
+                  maxLength: 250,
                 })}
               />
               {errors.art && (
@@ -220,8 +214,9 @@ export default function AddProduct() {
               id="file"
               {...register('file', {
                 required: 'Please enter articul number',
+                maxLength: 250,
               })}
-              className='opacity-0 max-w-[100px] relative   border border-gray-300 text-gray-900 text-sm rounded-lg  focus:bg-bluej-50 focus:border-blue-500 block w-full p-2.5 cursor-pointer'
+              className="opacity-0 max-w-[100px] relative   border border-gray-300 text-gray-900 text-sm rounded-lg  focus:bg-bluej-50 focus:border-blue-500 block w-full p-2.5 cursor-pointer"
               type="file"
             />
             {errors.file && (
@@ -233,8 +228,8 @@ export default function AddProduct() {
           </label>
 
           <div className="bg-blue-50 mt-6 rounded-lg">
-            {!!info &&
-              info.map((info) => (
+            {!!infoArr.length &&
+              infoArr.map((info) => (
                 <div
                   key={info.number}
                   className="rounded-lg sm:w-auto px-5 py-2.5 mt-6 flex flex-col"
@@ -248,10 +243,15 @@ export default function AddProduct() {
                       )}
                       value={info.title}
                       onChange={(e) =>
-                        changeInfo('title', e.target.value, info.number)
+                        changeInfo(
+                          'title',
+                          e.target.value,
+                          info.number as number
+                        )
                       }
                       type="text"
                       placeholder="заголовок"
+                      maxLength={30}
                       required
                     />
                   </label>
@@ -264,15 +264,20 @@ export default function AddProduct() {
                       )}
                       value={info.description}
                       onChange={(e) =>
-                        changeInfo('description', e.target.value, info.number)
+                        changeInfo(
+                          'description',
+                          e.target.value,
+                          info.number as number
+                        )
                       }
                       type="text"
                       placeholder="описание"
+                      maxLength={30}
                       required
                     />
                   </label>
                   <button
-                    onClick={() => removeInfo(info.number)}
+                    onClick={() => removeInfo(info.number as number)}
                     className="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none 
           focus:ring-blue-300 font-medium rounded-lg text-sm  sm:w-auto px-5 py-2.5 text-center mt-6 self-end"
                   >
@@ -305,4 +310,3 @@ export default function AddProduct() {
     </div>
   )
 }
-

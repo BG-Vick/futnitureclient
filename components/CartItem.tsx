@@ -1,13 +1,17 @@
 import { useActions } from '@/hooks/redux'
-import { useTypedSelector } from '@/hooks/useTypedSelector'
 import { ICart } from '@/models/models'
 import Image from 'next/image'
 import Link from 'next/link'
 import { IoMdAdd, IoMdClose, IoMdRemove } from 'react-icons/io'
 
-const CartItem = ({ item }: any) => {
-  const cart = useTypedSelector((state) => state.cart)
-  const {addItem, removeItem, countDecrement,countIncrement} = useActions()
+interface ICartItemProps {
+  item: ICart
+}
+
+
+const CartItem = ({ item }: ICartItemProps) => {
+  
+  const { removeItem, countDecrement,countIncrement } = useActions()
 
 
 
@@ -28,7 +32,7 @@ const CartItem = ({ item }: any) => {
         <Link href={`/products/${id}`}>
           <Image
             className="max-h-[80px] group-hover:scale-110 transition duration-300 w-auto h-auto"// w-auto h-auto возможны проблемы
-            src={'http://localhost:7000/' + img}
+            src={`${process.env.NEXT_PUBLIC_SERVER_URL}/` + img}
             width={80}
             height={80}
             alt="Picture of the author"
@@ -67,11 +71,11 @@ const CartItem = ({ item }: any) => {
               </div>
             </div>
             {/* item price */}
-            <div className='flex-1 flex items-center justify-around'>$ {price}</div>
+            <div className='flex-1 flex items-center justify-around'>{price} ₽</div>
             {/* final price */}
             {/* make the price at 2 decimals */}
             <div className="flex-1 flex justify-end items-center text-gray-900 font-medium">
-              {`$ ${(price * count)}`}
+              {`${(price * count)} ₽`}
             </div>
           </div>
         </div>

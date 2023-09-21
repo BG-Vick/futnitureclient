@@ -1,23 +1,20 @@
-import Hero from '@/components/Hero'
+// @ts-nocheck
 import Layout from '@/components/Layout'
 import Pagination from '@/components/Pagination'
 import Product from '@/components/Product'
-import { getAllProducts } from '@/store/fakeHTTP'
-import axios from 'axios'
-import Link from 'next/link'
+import { getAllProducts } from '@/store/typesApi'
 import { useState, useEffect, useRef } from 'react'
 import { useTypedSelector } from '@/hooks/useTypedSelector'
-import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
 import { wrapper } from '@/store/store'
 import { setProductState } from '@/store/reducers/productSlice'
-import { setUserState } from '@/store/reducers/userSlice'
 import { useDispatch } from 'react-redux'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { BiFilter } from 'react-icons/bi'
 import { fetchBrands, fetchTypes } from '@/store/typesApi'
 import clsx from 'clsx'
 import Head from 'next/head'
-import Logo from '../../public/logo (1).svg'
+import { IBrand, IProduct, IProducts, IType } from '@/models/models'
+import type { GetServerSideProps } from 'next'
 
 export const getServerSideProps: GetServerSideProps =
   wrapper.getServerSideProps((store) => async (ctx) => {
@@ -30,25 +27,34 @@ export const getServerSideProps: GetServerSideProps =
         limit: 10,
       })
       store.dispatch(setProductState(data.rows))
+      const initialTypes = await fetchTypes()
+      const initialBrands = await fetchBrands()
       return {
         props: {
           count: data.count,
+          propsTypes: initialTypes,
+          propsBrands: initialBrands
         },
       }
     } catch (e) {
       return { props: {} }
     }
-
     return { props: {} }
   })
 
-const Products = ({ count }: any) => {
+interface IProductsPage {
+  count: number
+  propsTypes: IType[]
+  propsBrands: IBrand[]
+}
+
+const Products = ({ count, propsTypes, propsBrands}: IProductsPage) => {
   const [countState, setCountState] = useState(count)
-  const [typeIdState, setTypeIdState] = useState('')
-  const [brandIdState, setBrandIdState] = useState('')
+  const [typeIdState, setTypeIdState] = useState<string | number>('')
+  const [brandIdState, setBrandIdState] = useState<string | number>('')
   const [search, setSearch] = useState('')
-  const [types, setTypes] = useState([])
-  const [brands, setBrands] = useState([])
+  const [types, setTypes] = useState<IType[]>(propsTypes)
+  const [brands, setBrands] = useState<IBrand[]>(propsBrands)
   const [screen, setScreen] = useState(0)
   const [typesActive, setTypesActive] = useState(false)
   const [brandsActive, setBrandsActive] = useState(false)
@@ -56,7 +62,7 @@ const Products = ({ count }: any) => {
   const [limit, setLimit] = useState(10)
   const [dropdownActive, setDropdownActive] = useState(false)
   const [refreshPage, setRefreshPage] = useState(true)
-  const products = useTypedSelector((state) => state.product)
+  const products: IProduct[] = useTypedSelector((state) => state.product)
   const dispatch = useDispatch()
   const ref = useRef(1)
 
@@ -126,7 +132,6 @@ const Products = ({ count }: any) => {
             })
             .catch((e) => console.log(e))
         }
-        //////////////////////////////////////////////////////////////////////////////////////////
 
         if (!typeIdState && !search && brandIdState) {
           getAllProducts({
@@ -143,7 +148,6 @@ const Products = ({ count }: any) => {
             .catch((e) => console.log(e))
         }
 
-        //////////////////////////////////////////////////////////////////////////////////////
         if (!brandIdState && !search && typeIdState) {
           getAllProducts({
             typeId: typeIdState,
@@ -161,6 +165,7 @@ const Products = ({ count }: any) => {
       }
     }
     ref.current++
+    // eslint-disable-next-line
   }, [page])
 
   const handleType = async (id: number) => {
@@ -175,7 +180,6 @@ const Products = ({ count }: any) => {
       page: 1,
       limit: 10,
     })
-    console.log(`запрос продуктов по типу`)
     setCountState(data.count)
     dispatch(setProductState(data.rows))
   }
@@ -197,19 +201,6 @@ const Products = ({ count }: any) => {
     dispatch(setProductState(data.rows))
   }
 
-  
-  const handleDropdown = () => {
-    setDropdownActive(!dropdownActive)
-    if (!dropdownActive) {
-      fetchTypes()
-        .then((data) => setTypes(data))
-        .catch((e) => console.log(e))
-      fetchBrands()
-        .then((data) => setBrands(data))
-        .catch((e) => console.log(e))
-    }
-  }
-
   if (!products) {
     return <div>Loading ...</div>
   }
@@ -217,16 +208,11 @@ const Products = ({ count }: any) => {
   return (
     <>
       <Head>
-        <title>Одежда 08 | Все модели</title>
+        <title>Одежда Элиста | купить одежду в Элисте</title>
         <meta charSet="UTF-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-          rel="icon"
-          type="image/svg"
-          sizes="32x32"
-          href="../../public/logo (1).svg"
-        />
+        <link rel="icon" type="image/svg" sizes="32x32" href="/img/logo.svg" />
       </Head>
       <Layout>
         <section className="pt-[20vh]  min-h-screen pb-5">
@@ -241,7 +227,11 @@ const Products = ({ count }: any) => {
                   placeholder="поиск"
                 />
                 <AiOutlineSearch className="w-6 h-6 absolute mt-2" />
-                <BiFilter onClick={handleDropdown} className="w-10 h-10" />
+                <BiFilter 
+                onClick={() => {
+                  if(types && brands)setDropdownActive(!dropdownActive)
+                  }} 
+                className="w-10 h-10" />
               </div>
 
               <div className="h-[2px] w-full bg-gray-300 mb-2"></div>
@@ -280,7 +270,7 @@ const Products = ({ count }: any) => {
                       <div className="h-[2px] w-full bg-gray-300 my-8"></div>
                       {typesActive && (
                         <div className="flex gap-4 justify-center mt-4 flex-wrap ">
-                          {types.map((type: any) => {
+                          {types.map((type) => {
                             return (
                               <button
                                 onClick={() => {
@@ -300,7 +290,7 @@ const Products = ({ count }: any) => {
                       )}
                       {brandsActive && (
                         <div className="flex gap-4 justify-center flex-wrap ">
-                          {brands.map((brand: any) => {
+                          {brands.map((brand) => {
                             return (
                               <button
                                 onClick={() => {
@@ -321,9 +311,9 @@ const Products = ({ count }: any) => {
                     </>
                   ) : (
                     <>
-                      <p className=" text-center my-6">Types</p>
+                      <p className=" text-center my-6">Категории товаров</p>
                       <div className="flex gap-4 justify-center mt-4 flex-wrap ">
-                        {types.map((type: any) => {
+                        {types.map((type) => {
                           return (
                             <button
                               onClick={() => {
@@ -341,9 +331,9 @@ const Products = ({ count }: any) => {
                         })}
                       </div>
                       <div className="h-[2px] w-full bg-gray-300 my-8"></div>
-                      <p className=" text-center my-6">Brands</p>
+                      <p className=" text-center my-6">Магазины</p>
                       <div className="flex gap-4 justify-center flex-wrap ">
-                        {brands.map((brand: any) => {
+                        {brands.map((brand) => {
                           return (
                             <button
                               onClick={() => {
@@ -365,10 +355,16 @@ const Products = ({ count }: any) => {
                 </div>
               )}
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0">
-              {products.map((product: any) => {
-                return <Product key={product.id} product={product} />
+              {products.map((product) => {
+                return (
+                  <Product
+                    types={types}
+                    brands={brands}
+                    key={product.id}
+                    product={product}
+                  />
+                )
               })}
             </div>
             <Pagination
@@ -385,53 +381,3 @@ const Products = ({ count }: any) => {
 }
 
 export default Products
-
-/* import Hero from '@/components/Hero'
-import Layout from '@/components/Layout'
-import Product from '@/components/Product'
-import { getAllProducts } from '@/store/fakeHTTP'
-import axios from 'axios'
-import Link from 'next/link'
-
-export const getStaticProps = async () => {
-  const data = await getAllProducts()
-  return { props: { data } }
-}
-
-const Products = ({ data }: any) => {
-  const products = data.rows
-
-  if (!products) {
-    return <div>Loading ...</div>
-  }
-
-  return (
-    <>
-      <Layout>
-        <section className="pt-[20vh]">
-          <div className="container mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0">
-              {products.map((product: any) => {
-                return <Product key={product.id} product={product} />
-              })}
-            </div>
-          </div>
-        </section>
-        <div className='mb-10 bg-pink-100'></div>
-      </Layout>
-    </>
-  )
-}
-
-export default Products
-
-
- */
-
-/*     <Head>
-        <title>Мебель 08 | ОДИН ДЕВАЙС</title>
-        <meta charSet="UTF-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" type="image/svg" sizes="32x32" href="/next.svg" />
-      </Head> */

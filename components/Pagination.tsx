@@ -1,7 +1,14 @@
 import clsx from "clsx"
-import Link from "next/link"
 
-export default function Pagination({limit, page,setPage, count}: any) {
+interface IPaginationProps {
+  limit: number
+  page: number
+  setPage: (arg0: number) => void
+  count: number
+}
+
+
+export default function Pagination({ limit, page, setPage, count }: IPaginationProps) {
     const pageCount = Math.ceil(count / limit)
     const pages = []
     for(let i = 1; i <= pageCount; i++){

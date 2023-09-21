@@ -1,5 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = false
 
@@ -8,11 +7,10 @@ export const sidebarSlice = createSlice({
   initialState,
   reducers: {
     setSidebarState: (state) => {
-        return state = !state
+      return (state = !state)
     },
   },
-  
 })
 
-export const sidebarReducer =  sidebarSlice.reducer
-export const {setSidebarState} = sidebarSlice.actions
+export const sidebarReducer = sidebarSlice.reducer
+export const { setSidebarState } = sidebarSlice.actions

@@ -1,17 +1,4 @@
-import { updateBrand, updateType } from '@/store/typesApi'
-import { registration, login, logout, check, getCookie } from '@/store/fakeHTTP'
-import { useEffect, useState, useId } from 'react'
-import { useTypedSelector } from '@/hooks/useTypedSelector'
-import { setUserState } from '@/store/reducers/userSlice'
-import { useDispatch } from 'react-redux'
-import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
-import { wrapper } from '@/store/store'
-import { parseCookies } from 'nookies'
-import { useRouter } from 'next/router'
-import Layout from '@/components/Layout'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import Link from 'next/link'
+import { updateType } from '@/store/typesApi'
 import { useForm } from 'react-hook-form'
 import clsx from 'clsx'
 
@@ -19,9 +6,17 @@ interface IEditTypeFormInput {
   type: string
 }
 
-export function ModalType({ isVisible, onClose }: any) {
-  const handleClose = (e) => {
-    if (e.target.id === 'wrapper') onClose(false)
+
+interface IModalBrandProps {
+  isVisible: number | false
+  onClose: (arg0:number | false) => void
+}
+
+
+export function ModalType({ isVisible, onClose }: IModalBrandProps) {
+  const handleClose = (e: React.SyntheticEvent) => {
+    const target = e.target as HTMLElement
+    if (target.id === 'wrapper') onClose(false)
   }
 
 
@@ -39,13 +34,14 @@ export function ModalType({ isVisible, onClose }: any) {
   })
   const onSubmit = async (data: IEditTypeFormInput) => {
     const { type } = data
-    
-    updateType(type, isVisible).then(data => {
-      reset({
-        type: '',
-      })
-      onClose(false)
-    }).catch (e => alert(e.response.data.message || e)) 
+    if(isVisible){
+      updateType(type, isVisible).then(data => {
+        reset({
+          type: '',
+        })
+        onClose(false)
+      }).catch (e => alert(e.response.data.message || e)) 
+    }
   }
 
   if (!isVisible) return null
@@ -77,6 +73,7 @@ export function ModalType({ isVisible, onClose }: any) {
                     placeholder="Добавьте магазин"
                     {...register('type', {
                       required: 'Please enter text',
+                      maxLength: 250,
                     })}
                   />
                   {errors.type && (

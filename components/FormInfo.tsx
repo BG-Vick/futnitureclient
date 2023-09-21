@@ -2,17 +2,36 @@ import { IInfo } from '@/models/models'
 import clsx from 'clsx'
 import { useState } from 'react'
 
-export default function FormInfo({ info, removeInfo, updateInfoInput }: any) {
+interface IFormInfoProps {
+  info: IInfo
+  removeInfo: (arg0: number) => void
+  updateInfoInput: (arg0: IInfo) => void
+}
+
+
+export default function FormInfo({ info, removeInfo, updateInfoInput }: IFormInfoProps) {
   const [state, setState] = useState<IInfo>({
     id: info.id,
     title: info.title,
     description: info.description,
   })
+  const [infoError, setInfoError] = useState<string>('')
+  const checkInfoInput = () => {
+    if(state.title.length > 250  || state.description.length > 250) {
+      setInfoError('в поле можно ввести не более 250 символов')
+    }else{
+      updateInfoInput(state)
+      setDisabled(true)
+      setInfoError('')
+    }
+
+  }
+
   const [disabled, setDisabled] = useState(false)
 
   return (
     <div>
-      <form className="flex mx-2 gap-4  flex-col ">
+      <div className="flex mx-2 gap-4  flex-col ">
         <label htmlFor='infoINPUT' className="flex flex-col">
           <p className="ml-2 mb-2">Заголовок:</p>
           <input
@@ -31,6 +50,7 @@ export default function FormInfo({ info, removeInfo, updateInfoInput }: any) {
               })
             }
             type="text"
+            maxLength={250}
             required
           />
         </label>
@@ -52,12 +72,16 @@ export default function FormInfo({ info, removeInfo, updateInfoInput }: any) {
               })
             }
             type="text"
+            maxLength={250}
             required
           />
+          <p className='text-red-500'>{infoError}</p>
+          
         </label>
         <div className="flex gap-5">
           <button
-            onClick={() => removeInfo(info.id)}
+            onClick={() => {
+              if(info.id) removeInfo(info.id)}}
             className={clsx(
               disabled
                 ? 'bg-red-200 hover:bg-red-200'
@@ -77,14 +101,13 @@ export default function FormInfo({ info, removeInfo, updateInfoInput }: any) {
             )}
             onClick={(e) => {
               e.preventDefault()
-              updateInfoInput(state)
-              setDisabled(true)
+              checkInfoInput()
             }}
           >
             Применить
           </button>
         </div>
-      </form>
+      </div>
     </div>
   )
 }

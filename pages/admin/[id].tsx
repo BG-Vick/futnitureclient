@@ -1,29 +1,20 @@
+// @ts-nocheck
 import { useTypedSelector } from '@/hooks/useTypedSelector'
-import axios from 'axios'
 import Image from 'next/image'
-import { IBrand, ICart, IType, IUser } from '@/models/models'
-import { useActions } from '@/hooks/redux'
-import Layout from '@/components/Layout'
+import { IBrand, IType } from '@/models/models'
 import { fetchBrands, fetchOneDevice, fetchTypes } from '@/store/typesApi'
 import { useState } from 'react'
 import EditForms from '@/components/EditForms'
 import clsx from 'clsx'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 import AdminHeader from '@/components/AdminHeader'
 import { wrapper } from '@/store/store'
-import type { InferGetServerSidePropsType, GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { parseCookies } from 'nookies'
 import { setUserState } from '@/store/reducers/userSlice'
-import { check } from '@/store/fakeHTTP'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { check } from '@/store/typesApi'
 import Link from 'next/link'
 import { IProduct } from '@/models/models'
-import { ParsedUrlQuery } from "querystring";
-
-
-
+import { ParsedUrlQuery } from 'querystring'
+import type { GetServerSideProps } from 'next'
 
 interface IOneProductProps {
   product: IProduct
@@ -31,16 +22,10 @@ interface IOneProductProps {
   brands: IBrand[]
 }
 
-type Repo = {
-  product: IProduct
-  types: IType[]
-  brands: IBrand[]
-}
 
 interface Params extends ParsedUrlQuery {
-  id: string;
+  id: string
 }
-
 export const getServerSideProps: GetServerSideProps =
   wrapper.getServerSideProps((store) => async (ctx) => {
     try {
@@ -50,12 +35,12 @@ export const getServerSideProps: GetServerSideProps =
       const brands = await fetchBrands()
       const { token } = parseCookies(ctx)
       const userData = await check(token)
-      store.dispatch(setUserState(userData))      
+      store.dispatch(setUserState(userData))
       return {
         props: {
           product,
           types,
-          brands
+          brands,
         },
       }
     } catch (e) {
@@ -70,11 +55,11 @@ const OneProduct = ({ product, types, brands }: IOneProductProps) => {
   const [edit, setEdit] = useState<boolean>(false)
   const user = useTypedSelector((state) => state.user)
 
-  if (!product?.name) return <div>Loading...</div>
-
   const { name, price, img, info, brandId, typeId, id } = product
   const actualType = types.find((type) => type.id === typeId)
   const actualBrand = brands.find((brand) => brand.id === brandId)
+
+  if (!product?.name) return <div>Loading...</div>
 
   if (user.role !== 'ADMIN')
     return (
@@ -120,9 +105,9 @@ const OneProduct = ({ product, types, brands }: IOneProductProps) => {
                 <div className="mb-8 border">
                   {info &&
                     info.map((i) => (
-                      <div key={i.id}>
-                        <p> Хар-ка: {i.title}</p>
-                        <p>Опис-е: {i.description}</p>
+                      <div className="border-2" key={i.id}>
+                        <p>{i.title}</p>
+                        <p>{i.description}</p>
                       </div>
                     ))}
                 </div>

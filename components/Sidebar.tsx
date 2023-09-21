@@ -7,8 +7,6 @@ import { setSidebarState } from '@/store/reducers/sidebarSlice'
 import CartItem from './CartItem'
 import { ICart } from '@/models/models'
 import { useActions } from '@/hooks/redux'
-import Link from 'next/link'
-import axios from 'axios'
 import { ModalSendOrder } from './ModalSendOrder'
 import clsx from 'clsx'
 
@@ -58,7 +56,7 @@ const Sidebar = () => {
         <div className=" flex w-full justify-between items-center">
           
           <div className="uppercase font-semibold">
-            <span className="mr-2">Total:</span>$ {total}
+            <span className="mr-2">Total:</span>{total} ₽
           </div>
           
           <div

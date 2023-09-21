@@ -1,18 +1,17 @@
-import { registration, login, logout, check, getCookie } from '@/store/fakeHTTP'
-import { useEffect, useState, useId } from 'react'
+import { login, check } from '@/store/typesApi'
+import { useId } from 'react'
 import { useTypedSelector } from '@/hooks/useTypedSelector'
 import { setUserState } from '@/store/reducers/userSlice'
 import { useDispatch } from 'react-redux'
-import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
 import { wrapper } from '@/store/store'
 import { parseCookies } from 'nookies'
-import { useRouter } from 'next/router'
-import Layout from '@/components/Layout'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import clsx from 'clsx'
+import { AxiosError } from 'axios'
+import type { GetServerSideProps } from 'next'
 
 interface ILoginFormInput {
   email: string
@@ -58,12 +57,13 @@ export default function Auth({}) {
         email: '',
         password: '',
       })
-    } catch (e) {
-      alert(e.response.data.message || e)
+    } catch (e: unknown) {
+      console.log(e)
+      if (e instanceof AxiosError) {
+        alert(e.message)
+      }
     }
   }
-
-
 
   return (
     <div className="flex flex-col h-screen">
@@ -80,8 +80,6 @@ export default function Auth({}) {
         </div>
       ) : (
         <section className="flex flex-col flex-1 ">
-         
-
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col w-[280px] sm:w-[400px] self-center pt-[35vh] "

@@ -1,7 +1,6 @@
-import { fetchBrands, fetchTypes, updateDevice } from '@/store/typesApi'
+import { updateDevice } from '@/store/typesApi'
 import clsx from 'clsx'
-import { useState, useEffect } from 'react'
-import { AiOutlineCaretDown, AiOutlineCaretUp } from 'react-icons/ai'
+import { useState } from 'react'
 import FormInfo from './FormInfo'
 import { useRouter } from 'next/router'
 import { IBrand, IInfo, IType } from '@/models/models'
@@ -71,7 +70,6 @@ export default function EditForms({
       typeId: actualType && actualType.id.toString(),
     },
   })
-
   const onSubmit = async (data: IEditDeviceFotmInput) => {
     const { name, price, brandId, typeId } = data
     const formData = new FormData()
@@ -148,6 +146,7 @@ export default function EditForms({
               className="bg-white  border border-gray-300 text-gray-900 text-sm rounded-lg focus:bg-gray-50 focus:border-blue-500 block w-full p-2.5  "
               {...register('name', {
                 required: 'Please enter name',
+                maxLength: 250,
               })}
             />
             {errors.name && (
@@ -165,6 +164,7 @@ export default function EditForms({
               className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:bg-gray-50 focus:border-blue-500 block w-full p-2.5  "
               {...register('price', {
                 required: 'Please enter text',
+                maxLength: 250,
               })}
             />
             {errors.price && (
@@ -176,7 +176,6 @@ export default function EditForms({
         {!!infoInput && (
           <div className="my-8 ml-8 font-semibold">
             Редактировать информацию о продукте
-            <button></button>
           </div>
         )}
         {!!infoInput &&

@@ -1,16 +1,10 @@
-
-
-/************************** */
-
 export interface IQuery {
   limit: number
   page: number
-  brandId: number | ""
-  typeId: number | ""
+  brandId: number | string
+  typeId: number | string
   name: string
 }
-
-/******************************************************************* */
 
 export interface IUser {
   id: number | null
@@ -18,42 +12,38 @@ export interface IUser {
   role: string
 }
 
-
-
-/************************** */
 export interface IProducts {
-  count: number;
-  rows: IProduct[];
+  count: number
+  rows: IProduct[]
 }
 
 export interface IProduct {
-  id: number;
-  name: string;
-  price: number;
-  rating: number;
-  img: string;
-  createdAt: string;
-  updatedAt: string;
-  typeId: number;
-  brandId: number;
-  info?: IInfo[] 
+  id: number
+  name: string
+  price: number
+  rating: number
+  img: string
+  art: string
+  createdAt: string
+  updatedAt: string
+  typeId: number
+  brandId: number
+  info?: IInfo[]
 }
 
-
-/************************************ */
 export interface ICart {
   count: number
-  id: number;
-  name: string;
-  price: number;
-  rating: number;
-  img: string;
-  createdAt: string;
-  updatedAt: string;
-  typeId: number;
-  brandId: number;
+  id: number
+  name: string
+  price: number
+  rating: number
+  img: string
+  art: string
+  createdAt: string
+  updatedAt: string
+  typeId: number
+  brandId: number
 }
-
 
 export interface IAddDeviceFormInput {
   selectedType: string
@@ -77,6 +67,6 @@ export interface IType {
 export interface IInfo {
   title: string
   description: string
-  number?: number 
-  id?: number 
+  number?: number
+  id?: number
 }

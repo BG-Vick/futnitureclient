@@ -1,7 +1,6 @@
 import { ICart } from '@/models/models'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-// SLICE - a collection of Redux reducer logic and actions for a single feature in your app
 const initialState: ICart[] = []
 
 export const cartSlice = createSlice({
@@ -16,18 +15,24 @@ export const cartSlice = createSlice({
       state: typeof initialState,
       action: PayloadAction<{ id: number }>
     ) => {
-      return state.filter(({ id }) => id !== action.payload.id);
+      return state.filter(({ id }) => id !== action.payload.id)
     },
-    countIncrement: (state: typeof initialState, action: PayloadAction<{ id: number }>) => {
+    countIncrement: (
+      state: typeof initialState,
+      action: PayloadAction<{ id: number }>
+    ) => {
       state.map((p) => {
-        if(p.id === action.payload.id){
+        if (p.id === action.payload.id) {
           p.count++
         }
       })
     },
-    countDecrement: (state: typeof initialState, action: PayloadAction<{ id: number }>) => {
+    countDecrement: (
+      state: typeof initialState,
+      action: PayloadAction<{ id: number }>
+    ) => {
       state.map((p) => {
-        if(p.id === action.payload.id){
+        if (p.id === action.payload.id) {
           p.count--
         }
       })

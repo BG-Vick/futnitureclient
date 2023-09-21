@@ -1,9 +1,6 @@
 import {
   fetchTypes,
   fetchBrands,
-  deleteBrand,
-  deleteType,
-  updateBrand,
   updateType,
 } from '@/store/typesApi'
 import { useEffect, useState } from 'react'
