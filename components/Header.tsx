@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useTypedSelector } from '@/hooks/useTypedSelector'
 import { setSidebarState } from '@/store/reducers/sidebarSlice'
 import { useDispatch } from 'react-redux'
@@ -8,7 +9,6 @@ import { TbHomeSearch } from 'react-icons/tb'
 import Logo from '@/public/logo (1).svg'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
 import clsx from 'clsx'
 
 const Header = () => {
