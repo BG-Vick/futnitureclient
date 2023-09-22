@@ -2,11 +2,11 @@
 const nextConfig = {
   //reactStrictMode: true,
   images: {
-    domains: ['localhost']
+    domains: [process.env.NEXT_PUBLIC_DB_HOST]
     //remotePatterns: [
     //  {
-        //protocol: 'https' || 'http',
-        //hostname: 'localhost',
+    //    protocol: 'https' || 'http',
+    //    hostname: process.env.NEXT_PUBLIC,
     //  },
     //],
   },
