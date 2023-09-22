@@ -1,10 +1,12 @@
 import WomanImg from '@/public/woman_hero.png'
 import Image from 'next/image'
 import Link from 'next/link'
+import BGImage from '@/public/bg_hero.svg'
+//className="h-[800px] bg-hero bg-no-repeat bg-cover bg-center py-24"
 
 const Hero = () => {
   return (
-    <section className="h-[800px] bg-hero bg-no-repeat bg-cover bg-center py-24">
+    <section className="h-[800px] bg-orange-50 bg-no-repeat bg-cover bg-center py-24" > 
       <div className="container mx-auto flex justify-around h-full">
         {/* text */}
         <div className="flex flex-col justify-center">
