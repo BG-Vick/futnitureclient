@@ -42,7 +42,7 @@ const Product = ({ product, types, brands }: IProductProps) => {
               alt="product"
               priority
             /> */}
-            <img src={`${process.env.NEXT_PUBLIC_DB_HOST}` + img} alt="img" />
+            <img className="group-hover:scale-110 transition duration-300 object-cover" src={`${process.env.NEXT_PUBLIC_DB_HOST}` + img} alt="img" />
           </div>
         </div>
 
