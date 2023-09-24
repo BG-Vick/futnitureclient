@@ -39,13 +39,14 @@ export const getStaticPaths = (async () => {
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { id } = ctx.params as Params
   try {
-    const product = await fetchOneDevice(Number(id))
+    const product: IProduct = await fetchOneDevice(Number(id))
     return {
       props: {
         product,
       },
     }
   } catch (e) {
+    console.log(e)
     return { props: {} }
   }
 }
@@ -63,9 +64,9 @@ const OneProduct: NextPage<PageProps> = ({ product }) => {
       return
     }
   }
-  if(!product.name) return null
-  
-  const { name, price, img, info } = product
+  if(!product) return null
+  const {price,  name,  img, info } = product
+
 
   return (
     <>
