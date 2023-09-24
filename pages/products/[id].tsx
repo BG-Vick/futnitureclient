@@ -58,8 +58,8 @@ const OneProduct: NextPage<PageProps> = ({ product }) => {
                     `${process.env.NEXT_PUBLIC_DB_HOST}` +
                     img
                   }
-                  width={400}
-                  height={400}
+                  //width={400}
+                  //height={400}
                   alt="product"
                   priority
                 />
