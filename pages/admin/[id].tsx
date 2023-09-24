@@ -22,7 +22,6 @@ interface IOneProductProps {
   brands: IBrand[]
 }
 
-
 interface Params extends ParsedUrlQuery {
   id: string
 }
@@ -85,13 +84,18 @@ const OneProduct = ({ product, types, brands }: IOneProductProps) => {
           <div className="container mx-auto ">
             <div className="flex flex-col lg:flex-row items-center gap-5">
               <div className="flex flex-1 justify-center items-center mb-8 lg:mb-0">
-                <Image
+                {/*               <Image
                   className="w-[80%] h-auto group-hover:scale-110 transition duration-300 object-cover"
                   src={`${process.env.NEXT_PUBLIC_SERVER_URL}/` + img}
                   width={400}
                   height={400}
                   alt="product"
                   priority
+                /> */}
+                <img
+                  className="w-[80%] h-auto group-hover:scale-110 transition duration-300 object-cover"
+                  src={`${process.env.NEXT_PUBLIC_SERVER_URL}` + img}
+                  alt="img"
                 />
               </div>
 

@@ -52,7 +52,11 @@ const OneProduct: NextPage<PageProps> = ({ product }) => {
           <div className="container mx-auto">
             <div className="flex flex-col lg:flex-row items-center gap-5 ">
               <div className="flex flex-1 justify-center items-center mb-8 lg:mb-0">
-                <img src={`${process.env.NEXT_PUBLIC_DB_HOST}` + img} alt="img" />
+                <img
+                  className="w-full h-full   max-w-[300px] lg:max-w-md sm:max-w-[350px] object-cover"
+                  src={`${process.env.NEXT_PUBLIC_SERVER_URL}` + img}
+                  alt="img"
+                />
                 {/* <Image
                   className="w-full h-full   max-w-[300px] lg:max-w-md sm:max-w-[350px] object-cover"
                   src={
@@ -78,7 +82,7 @@ const OneProduct: NextPage<PageProps> = ({ product }) => {
                     info.map((i) => (
                       <div className="bg-gray-100 mb-2" key={i.id}>
                         <p>{i.title}</p>
-                        <p className='uppercase '>{i.description}</p>
+                        <p className="uppercase ">{i.description}</p>
                       </div>
                     ))}
                 </div>

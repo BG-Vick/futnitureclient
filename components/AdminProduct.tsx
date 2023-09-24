@@ -16,13 +16,18 @@ const AdminProduct = ({ product, handleRemoveProduct }: IAdminProductProps) => {
       <div className="border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group transition ">
         <div className="w-full h-full flex justify-center items-center ">
           <div className="w-[200px]  mx-auto flex justify-center items-center ">
-            <Image
+            {/*             <Image
               className="group-hover:scale-110 transition duration-300 object-cover"
               src={`${process.env.NEXT_PUBLIC_SERVER_URL}/` + img}
               width={400}
               height={400}
               alt="product"
               priority
+            /> */}
+            <img
+              className="group-hover:scale-110 transition duration-300 object-cover"
+              src={`${process.env.NEXT_PUBLIC_SERVER_URL}` + img}
+              alt="img"
             />
           </div>
         </div>

@@ -8,17 +8,12 @@ interface ICartItemProps {
   item: ICart
 }
 
-
 const CartItem = ({ item }: ICartItemProps) => {
-  
-  const { removeItem, countDecrement,countIncrement } = useActions()
-
-
-
+  const { removeItem, countDecrement, countIncrement } = useActions()
 
   function handleRemoveCart(product: ICart) {
-    if(product.count < 2){
-        removeItem(product)
+    if (product.count < 2) {
+      removeItem(product)
     } else {
       countDecrement(product)
     }
@@ -30,13 +25,18 @@ const CartItem = ({ item }: ICartItemProps) => {
       <div className="w-full min-h-[150px] flex items-center gap-x-4">
         {/* image */}
         <Link href={`/products/${id}`}>
-          <Image
+          {/*           <Image
             className="max-h-[80px] group-hover:scale-110 transition duration-300 w-auto h-auto"// w-auto h-auto возможны проблемы
             src={`${process.env.NEXT_PUBLIC_SERVER_URL}/` + img}
             width={80}
             height={80}
             alt="Picture of the author"
             priority
+          /> */}
+          <img
+            className="max-h-[80px] group-hover:scale-110 transition duration-300 w-auto h-auto"
+            src={`${process.env.NEXT_PUBLIC_SERVER_URL}` + img}
+            alt="img"
           />
         </Link>
         <div className="w-full flex flex-col">
@@ -51,14 +51,20 @@ const CartItem = ({ item }: ICartItemProps) => {
             </Link>
             {/* remove icon */}
             <div className="text-xl cursor-pointer">
-              <IoMdClose onClick={() => removeItem(item)} className="text-gray-500 hover:text-red-500 transition" />
+              <IoMdClose
+                onClick={() => removeItem(item)}
+                className="text-gray-500 hover:text-red-500 transition"
+              />
             </div>
           </div>
           <div className=" flex gap-x-2 h-[36px] text-sm">
             {/* qty */}
             <div className="flex flex-1 max-w-[100px]  items-center h-full border text-gray-900 font-medium">
               {/* minus icon */}
-              <div onClick={() => handleRemoveCart(item)} className="flex-1 flex justify-center items-center cursor-pointer h-full">
+              <div
+                onClick={() => handleRemoveCart(item)}
+                className="flex-1 flex justify-center items-center cursor-pointer h-full"
+              >
                 <IoMdRemove />
               </div>
               {/* amount */}
@@ -66,16 +72,21 @@ const CartItem = ({ item }: ICartItemProps) => {
                 {count}
               </div>
               {/* plus icon */}
-              <div onClick={() => countIncrement(item)} className="flex-1 h-full flex justify-center items-center cursor-pointer">
-                <IoMdAdd/>
+              <div
+                onClick={() => countIncrement(item)}
+                className="flex-1 h-full flex justify-center items-center cursor-pointer"
+              >
+                <IoMdAdd />
               </div>
             </div>
             {/* item price */}
-            <div className='flex-1 flex items-center justify-around'>{price} ₽</div>
+            <div className="flex-1 flex items-center justify-around">
+              {price} ₽
+            </div>
             {/* final price */}
             {/* make the price at 2 decimals */}
             <div className="flex-1 flex justify-end items-center text-gray-900 font-medium">
-              {`${(price * count)} ₽`}
+              {`${price * count} ₽`}
             </div>
           </div>
         </div>

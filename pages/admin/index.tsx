@@ -12,8 +12,6 @@ import Link from 'next/link'
 import { IProduct } from '@/models/models'
 import type { GetServerSideProps } from 'next'
 
-
-
 export const getServerSideProps: GetServerSideProps =
   wrapper.getServerSideProps((store) => async (ctx) => {
     try {
