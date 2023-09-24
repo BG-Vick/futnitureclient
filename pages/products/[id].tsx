@@ -52,17 +52,18 @@ const OneProduct: NextPage<PageProps> = ({ product }) => {
           <div className="container mx-auto">
             <div className="flex flex-col lg:flex-row items-center gap-5 ">
               <div className="flex flex-1 justify-center items-center mb-8 lg:mb-0">
-                <Image
+                <img src={`${process.env.NEXT_PUBLIC_DB_HOST}` + img} alt="img" />
+                {/* <Image
                   className="w-full h-full   max-w-[300px] lg:max-w-md sm:max-w-[350px] object-cover"
                   src={
                     `${process.env.NEXT_PUBLIC_DB_HOST}` +
                     img
                   }
-                  //width={400}
-                  //height={400}
+                  width={400}
+                  height={400}
                   alt="product"
                   priority
-                />
+                /> */}
               </div>
 
               <div className=" text-center lg:text-left flex-1 ">
