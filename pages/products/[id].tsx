@@ -55,6 +55,7 @@ const OneProduct: NextPage<PageProps> = ({ product }) => {
   const { addItem } = useActions()
 
   const alreadyInCart = cart.some((item) => item.id === product?.id)
+
   function handleAddIntoCart(product: ICart) {
     if (!alreadyInCart) {
       addItem(product)
@@ -62,8 +63,10 @@ const OneProduct: NextPage<PageProps> = ({ product }) => {
       return
     }
   }
-
+  if(!product.name) return null
+  
   const { name, price, img, info } = product
+
   return (
     <>
       <Head>
