@@ -55,7 +55,7 @@ const OneProduct: NextPage<PageProps> = ({ product }) => {
                 <Image
                   className="w-full h-full   max-w-[300px] lg:max-w-md sm:max-w-[350px] object-cover"
                   src={
-                    `https://${process.env.NEXT_PUBLIC_DB_HOST}/` +
+                    `${process.env.NEXT_PUBLIC_DB_HOST}` +
                     img
                   }
                   width={400}
