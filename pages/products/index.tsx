@@ -13,9 +13,10 @@ import clsx from 'clsx'
 import Head from 'next/head'
 import { IBrand, IProduct, IType } from '@/models/models'
 import type { GetStaticProps } from 'next'
+import { useTypedSelector } from '@/hooks/useTypedSelector'
 
 interface IProductsPage {
-  products: IProduct[]
+  productsProps: IProduct[]
   count: number
   types: IType[]
   brands: IBrand[]
@@ -34,7 +35,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     const initialBrands = await fetchBrands()
     return {
       props: {
-        products: data.rows,
+        productsProps: data.rows,
         count: data.count,
         types: initialTypes,
         brands: initialBrands,
@@ -46,7 +47,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   return { props: {} }
 }
 
-const Products = ({ products, count, types, brands }: IProductsPage) => {
+const Products = ({ productsProps, count, types, brands }: IProductsPage) => {
   const [countState, setCountState] = useState(count)
   const [typeIdState, setTypeIdState] = useState<string | number>('')
   const [brandIdState, setBrandIdState] = useState<string | number>('')
@@ -57,12 +58,15 @@ const Products = ({ products, count, types, brands }: IProductsPage) => {
   const [page, setPage] = useState(1)
   const [dropdownActive, setDropdownActive] = useState(false)
   const [refreshPage, setRefreshPage] = useState(true)
+  const products: IProduct[] = useTypedSelector((state) => state.product)
   const limit = 10
   const dispatch = useDispatch()
   const ref = useRef(1)
 
   useEffect(() => {
     setScreen(window.innerWidth)
+    dispatch(setProductState(productsProps))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
