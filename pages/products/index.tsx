@@ -1,11 +1,9 @@
-// @ts-nocheck
+// @ts-nocheck//
 import Layout from '@/components/Layout'
 import Pagination from '@/components/Pagination'
 import Product from '@/components/Product'
 import { getAllProducts } from '@/store/typesApi'
 import { useState, useEffect, useRef } from 'react'
-import { useTypedSelector } from '@/hooks/useTypedSelector'
-import { wrapper } from '@/store/store'
 import { setProductState } from '@/store/reducers/productSlice'
 import { useDispatch } from 'react-redux'
 import { AiOutlineSearch } from 'react-icons/ai'
@@ -13,56 +11,53 @@ import { BiFilter } from 'react-icons/bi'
 import { fetchBrands, fetchTypes } from '@/store/typesApi'
 import clsx from 'clsx'
 import Head from 'next/head'
-import { IBrand, IProduct, IProducts, IType } from '@/models/models'
-import type { GetServerSideProps } from 'next'
-
-export const getServerSideProps: GetServerSideProps =
-  wrapper.getServerSideProps((store) => async (ctx) => {
-    try {
-      const data = await getAllProducts({
-        typeId: '',
-        brandId: '',
-        name: '',
-        page: 1,
-        limit: 10,
-      })
-      store.dispatch(setProductState(data.rows))
-      const initialTypes = await fetchTypes()
-      const initialBrands = await fetchBrands()
-      return {
-        props: {
-          count: data.count,
-          propsTypes: initialTypes,
-          propsBrands: initialBrands
-        },
-      }
-    } catch (e) {
-      return { props: {} }
-    }
-    return { props: {} }
-  })
+import { IBrand, IProduct, IType } from '@/models/models'
+import type { GetStaticProps } from 'next'
 
 interface IProductsPage {
+  products: IProduct[]
   count: number
-  propsTypes: IType[]
-  propsBrands: IBrand[]
+  types: IType[]
+  brands: IBrand[]
 }
 
-const Products = ({ count, propsTypes, propsBrands}: IProductsPage) => {
+export const getStaticProps: GetStaticProps = async (ctx) => {
+  try {
+    const data = await getAllProducts({
+      typeId: '',
+      brandId: '',
+      name: '',
+      page: 1,
+      limit: 10,
+    })
+    const initialTypes = await fetchTypes()
+    const initialBrands = await fetchBrands()
+    return {
+      props: {
+        products: data.rows,
+        count: data.count,
+        types: initialTypes,
+        brands: initialBrands,
+      },
+    }
+  } catch (e) {
+    return { props: {} }
+  }
+  return { props: {} }
+}
+
+const Products = ({ products, count, types, brands }: IProductsPage) => {
   const [countState, setCountState] = useState(count)
   const [typeIdState, setTypeIdState] = useState<string | number>('')
   const [brandIdState, setBrandIdState] = useState<string | number>('')
   const [search, setSearch] = useState('')
-  const [types, setTypes] = useState<IType[]>(propsTypes)
-  const [brands, setBrands] = useState<IBrand[]>(propsBrands)
   const [screen, setScreen] = useState(0)
   const [typesActive, setTypesActive] = useState(false)
   const [brandsActive, setBrandsActive] = useState(false)
   const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(10)
   const [dropdownActive, setDropdownActive] = useState(false)
   const [refreshPage, setRefreshPage] = useState(true)
-  const products: IProduct[] = useTypedSelector((state) => state.product)
+  const limit = 10
   const dispatch = useDispatch()
   const ref = useRef(1)
 
@@ -227,11 +222,12 @@ const Products = ({ count, propsTypes, propsBrands}: IProductsPage) => {
                   placeholder="поиск"
                 />
                 <AiOutlineSearch className="w-6 h-6 absolute mt-2" />
-                <BiFilter 
-                onClick={() => {
-                  if(types && brands)setDropdownActive(!dropdownActive)
-                  }} 
-                className="w-10 h-10" />
+                <BiFilter
+                  onClick={() => {
+                    if (types && brands) setDropdownActive(!dropdownActive)
+                  }}
+                  className="w-10 h-10"
+                />
               </div>
 
               <div className="h-[2px] w-full bg-gray-300 mb-2"></div>

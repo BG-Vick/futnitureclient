@@ -1,10 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 import { BsPlus, BsEyeFill } from 'react-icons/bs'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useActions } from '@/hooks/redux'
 import { IBrand, ICart, IProduct, IType } from '@/models/models'
 import { useTypedSelector } from '@/hooks/useTypedSelector'
-import { types } from 'util'
 
 interface IProductProps {
   product: IProduct

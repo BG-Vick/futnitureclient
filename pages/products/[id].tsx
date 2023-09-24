@@ -1,12 +1,14 @@
+/* eslint-disable @next/next/no-img-element */
 import { useTypedSelector } from '@/hooks/useTypedSelector'
 import Image from 'next/image'
-import { ICart, IProduct } from '@/models/models'
+import { ICart, IProduct, IProducts } from '@/models/models'
 import { useActions } from '@/hooks/redux'
 import Layout from '@/components/Layout'
-import { fetchOneDevice } from '@/store/typesApi'
-import { GetServerSideProps, NextPage } from 'next'
+import { fetchOneDevice, getAllProducts } from '@/store/typesApi'
+import { NextPage } from 'next'
 import { ParsedUrlQuery } from 'querystring'
 import Head from 'next/head'
+import type { GetStaticProps, GetStaticPaths } from 'next'
 
 interface PageProps {
   product: IProduct
@@ -16,12 +18,36 @@ interface Params extends ParsedUrlQuery {
   id: string
 }
 
-export const getServerSideProps: GetServerSideProps<PageProps> = async (
-  ctx
-) => {
+export const getStaticPaths = (async () => {
+  const data: IProducts = await getAllProducts({
+    typeId: '',
+    brandId: '',
+    name: '',
+    page: 1,
+    limit: 10000,
+  })
+  const paths = data.rows.map(({ id }) => ({
+    params: { id: id.toString() },
+  }))
+
+  return {
+    paths,
+    fallback: true,
+  }
+}) satisfies GetStaticPaths
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
   const { id } = ctx.params as Params
-  const product = await fetchOneDevice(Number(id))
-  return { props: { product } }
+  try {
+    const product = await fetchOneDevice(Number(id))
+    return {
+      props: {
+        product,
+      },
+    }
+  } catch (e) {
+    return { props: {} }
+  }
 }
 
 const OneProduct: NextPage<PageProps> = ({ product }) => {
