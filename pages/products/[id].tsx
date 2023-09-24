@@ -55,7 +55,8 @@ const OneProduct: NextPage<PageProps> = ({ product }) => {
                 <Image
                   className="w-full h-full   max-w-[300px] lg:max-w-md sm:max-w-[350px] object-cover"
                   src={
-                    'https://furnitureserver-production.up.railway.app/c3b98018-9a8f-4b17-b49d-bf2ca2066c72.jpg'
+                    `https://${process.env.NEXT_PUBLIC_DB_HOST}/` +
+                    img
                   }
                   width={400}
                   height={400}
