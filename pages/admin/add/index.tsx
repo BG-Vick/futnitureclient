@@ -251,7 +251,7 @@ export default function AddProduct() {
                       }
                       type="text"
                       placeholder="заголовок"
-                      maxLength={30}
+                      maxLength={250}
                       required
                     />
                   </label>
@@ -272,7 +272,7 @@ export default function AddProduct() {
                       }
                       type="text"
                       placeholder="описание"
-                      maxLength={30}
+                      maxLength={250}
                       required
                     />
                   </label>
